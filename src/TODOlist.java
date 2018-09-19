@@ -17,7 +17,9 @@ public class TODOlist {
     Iterator itr = list.iterator();
         while (itr.hasNext()){
             Note n = (Note)itr.next();
-            if(year==n.getDate().get(Calendar.YEAR) && month == n.getDate().get(Calendar.MONTH) && day == n.getDate().get(Calendar.DAY_OF_MONTH)){
+            if(year==n.getDate().get(Calendar.YEAR)
+                    && month == n.getDate().get(Calendar.MONTH)
+                    && day == n.getDate().get(Calendar.DAY_OF_MONTH)){
                 //n.addMemo(memo);
                 return n;
             }
@@ -25,41 +27,33 @@ public class TODOlist {
         return null;
     }
 
-    public void addNote(GregorianCalendar date, String memo){
-        Note n = isExist(date.get(Calendar.YEAR),date.get(Calendar.MONTH),date.get(Calendar.DAY_OF_MONTH));
-        if(n == null){
-            list.add(new Note(date, memo));
-        }else{n.addMemo(memo);}
-        if(sort)this.sortList();
-    }
     public void addNote(int year, int month, int day , String memo) {
-        Note n = isExist(year,month,day);
-        if(n==null){
-            list.add(new Note(year,month,day,memo));
-        }else{n.addMemo(memo);}
-        if(sort)this.sortList();
-    }
-    public void addNote() {
-        GregorianCalendar date = new GregorianCalendar();
-        String memo = "empty note";
-        Note n = isExist(date.get(Calendar.YEAR),date.get(Calendar.MONTH),date.get(Calendar.DAY_OF_MONTH));
-        if(n == null){
-            list.add(new Note(date, memo));
-        }else{n.addMemo(memo);}
-        if(sort)this.sortList();
-    }
-    public void addNote(String memo) {
-        GregorianCalendar date = new GregorianCalendar();
-        Note n = isExist(date.get(Calendar.YEAR),date.get(Calendar.MONTH),date.get(Calendar.DAY_OF_MONTH));
-        if(n == null){
-            list.add(new Note(date, memo));
-        }else {n.addMemo(memo);}
-        if(sort)this.sortList();
+        list.add(new Note(year,month,day,memo));
+        this.sortList();
     }
 
     public void showAll(){
-        for (Note n : list){
-            System.out.println(n);
+        Iterator itr = list.iterator();
+        if(itr.hasNext()){
+            Note prev = (Note)itr.next();
+            System.out.println("YEAR: "+prev.getDate().get(Calendar.YEAR));
+            System.out.println(" MONTH: "+prev.getDate().get(Calendar.MONTH));
+            System.out.println("  DAY: "+prev.getDate().get(Calendar.DAY_OF_MONTH));
+            System.out.println("   "+prev.getMemo());
+            while (itr.hasNext()){
+                Note n = (Note)itr.next();
+                if(n.getDate().get(Calendar.YEAR)!=prev.getDate().get(Calendar.YEAR)){
+                    System.out.println("YEAR: "+n.getDate().get(Calendar.YEAR));
+                }
+                if(n.getDate().get(Calendar.MONTH)!=prev.getDate().get(Calendar.MONTH)){
+                    System.out.println(" MONTH: "+n.getDate().get(Calendar.MONTH));
+                }
+                if(n.getDate().get(Calendar.DAY_OF_MONTH)!=prev.getDate().get(Calendar.DAY_OF_MONTH)){
+                    System.out.println("  DAY: "+n.getDate().get(Calendar.DAY_OF_MONTH));
+                }
+                System.out.println("   "+n.getMemo());
+                prev = n;
+            }
         }
     }
     public void showInterval(int year1, int month1, int day1,int year2, int month2, int day2){
@@ -93,7 +87,10 @@ public class TODOlist {
         Iterator itr = list.iterator();
         while (itr.hasNext()){
             Note n = (Note)itr.next();
-            if(year==n.getDate().get(Calendar.YEAR) && month == n.getDate().get(Calendar.MONTH) && day == n.getDate().get(Calendar.DAY_OF_MONTH) && n.getMemo()==memo){
+            if(year==n.getDate().get(Calendar.YEAR)
+                    && month == n.getDate().get(Calendar.MONTH)
+                    && day == n.getDate().get(Calendar.DAY_OF_MONTH)
+                    && n.getMemo()==memo){
                 itr.remove();
                 return;
             }
@@ -104,7 +101,9 @@ public class TODOlist {
         Iterator itr = list.iterator();
         while (itr.hasNext()){
             Note n = (Note)itr.next();
-            if(year==n.getDate().get(Calendar.YEAR) && month == n.getDate().get(Calendar.MONTH) && day == n.getDate().get(Calendar.DAY_OF_MONTH)){
+            if(year==n.getDate().get(Calendar.YEAR)
+                    && month == n.getDate().get(Calendar.MONTH)
+                    && day == n.getDate().get(Calendar.DAY_OF_MONTH)){
                 n.changeMemo(memo);
                 return;
             }

@@ -2,15 +2,20 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Note implements Comparable<Note>{
+    static public String RED = "\u001B[1;31m"; //bright red
+    static public String GREEN = "\u001B[1;32m";
+    static public String DEFAULT = "\u001B[39;49m";
     private String memo;
     private GregorianCalendar date;
+    //private boolean status = false;
+    private String tag = Note.RED;
 
     public Note(int year, int month, int date, String memo){
         this.date = new GregorianCalendar(year,month,date);
         this.memo=memo;
     }
 
-    public Note(GregorianCalendar date, String memo){
+    /*public Note(GregorianCalendar date, String memo){
         this.date=date;
         this.memo=memo;
     }
@@ -21,7 +26,7 @@ public class Note implements Comparable<Note>{
     public Note(){
         this.date = new GregorianCalendar();
         this.memo = "empty note";
-    }
+    }*/
     @Override
     public int compareTo(Note note){
         int ans = this.date.compareTo(note.getDate());
@@ -40,7 +45,14 @@ public class Note implements Comparable<Note>{
                 + "."
                 + this.getDate().get(Calendar.YEAR)
                 +" \nnote: "
-                + this.getMemo());
+                +this.tag
+                +" "
+                + this.getMemo())
+                +Note.DEFAULT;
+    }
+
+    public void doneNote(){
+        this.tag=Note.GREEN;
     }
 
     protected void  addMemo(String memo){
@@ -51,7 +63,7 @@ public class Note implements Comparable<Note>{
     }
 
     public String getMemo() {
-        return memo;
+        return this.tag+memo+Note.DEFAULT;
     }
 
     public GregorianCalendar getDate() {

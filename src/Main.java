@@ -4,11 +4,9 @@ public class Main {
 
     public static void main(String[] args) {
         TODOlist todOlist = new TODOlist();
-        todOlist.addNote(new GregorianCalendar(), "Note1");
-        todOlist.addNote();
-        todOlist.addNote("create mew stuff");
         todOlist.addNote(2017,8,26, "Note2");
         todOlist.addNote(2019,1,1,"Celebrate New Year.");
+        todOlist.addNote(2019,1,2,"Celebrate New Year TWICE.");
         todOlist.showAll();
         System.out.print("\nInterval:\n");
 
@@ -21,12 +19,12 @@ public class Main {
        todOlist.showAll();*/
 
 
-       todOlist.addNote(2021,8,25,"Graduate from university!");
+      /* todOlist.addNote(2021,8,25,"Graduate from university!");
        todOlist.addNote("Push everything to GotHub.");
        todOlist.showAll();
        System.out.print("\n");
        todOlist.changeMemo(2018,8,16,"Commit to local repository then push to GitHub!");
        todOlist.addNote(2021,8,25, "Have a good time.");
-       todOlist.showAll();
+       todOlist.showAll();*/
     }
 }
