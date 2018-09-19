@@ -1,3 +1,5 @@
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.*;
 
 public class ToDoList {
@@ -22,56 +24,56 @@ public class ToDoList {
         }
     }
 
-    public void printAll() {
+    public void printAll(PrintStream stream) {
         Iterator<Note> itr = list.iterator();
         if (itr.hasNext()) {
             Note prev = itr.next();
-            System.out.println("YEAR: " + prev.getDate().getYear());
-            System.out.println(" MONTH: " + prev.getDate().getMonth());
-            System.out.println("  DAY: " + prev.getDate().getDayOfMonth());
-            System.out.println("   " + prev.getMemoToPrint());
+            stream.println("YEAR: " + prev.getDate().getYear());
+            stream.println(" MONTH: " + prev.getDate().getMonth());
+            stream.println("  DAY: " + prev.getDate().getDayOfMonth());
+            stream.println("   " + prev.getMemoWithColor());
             while (itr.hasNext()) {
                 Note n = itr.next();
-                printList(prev, n);
-                System.out.println("   " + n.getMemoToPrint());
+                printList(prev, n, stream);
+                stream.println("   " + n.getMemoWithColor());
                 prev = n;
             }
         }
     }
 
-    public void printNotesInTheInerval(NoteDate date1, NoteDate date2) {
-        System.out.println("Interval:");
+    public void printNotesInTheInerval(NoteDate date1, NoteDate date2, PrintStream stream) {
+        stream.println("Interval:");
         Iterator itr = list.iterator();
         while (itr.hasNext()) {
             Note prev = (Note) itr.next();
             if (prev.getDate().compareTo(date1) >= 0) {
-                System.out.println("YEAR: " + prev.getDate().getYear());
-                System.out.println(" MONTH: " + prev.getDate().getMonth());
-                System.out.println("  DAY: " + prev.getDate().getDayOfMonth());
-                System.out.println("   " + prev.getMemoToPrint());
+                stream.println("YEAR: " + prev.getDate().getYear());
+                stream.println(" MONTH: " + prev.getDate().getMonth());
+                stream.println("  DAY: " + prev.getDate().getDayOfMonth());
+                stream.println("   " + prev.getMemoWithColor());
                 while (itr.hasNext()) {
                     Note n = (Note) itr.next();
                     if (n.getDate().compareTo(date2) <= 0) {
-                        printList(prev, n);
-                        System.out.println("   " + n.getMemoToPrint());
+                        printList(prev, n, stream);
+                        stream.println("   " + n.getMemoWithColor());
                         prev = n;
                     }
                 }
             }
         }
-        System.out.println("End of interval.");
+        stream.println("End of interval.");
     }
 
-    private void printList(Note prev, Note n) { //except first note(prev)
+    private void printList(Note prev, Note n, PrintStream stream) { //except first note(prev)
         if (n.getDate().getYear() != prev.getDate().getYear()) {
-            System.out.println("YEAR: " + n.getDate().getYear());
-            System.out.println(" MONTH: " + n.getDate().getMonth());
-            System.out.println("  DAY: " + n.getDate().getDayOfMonth());
+            stream.println("YEAR: " + n.getDate().getYear());
+            stream.println(" MONTH: " + n.getDate().getMonth());
+            stream.println("  DAY: " + n.getDate().getDayOfMonth());
         } else if (n.getDate().getMonth() != prev.getDate().getMonth()) {
-            System.out.println(" MONTH: " + n.getDate().getMonth());
-            System.out.println("  DAY: " + n.getDate().getDayOfMonth());
+            stream.println(" MONTH: " + n.getDate().getMonth());
+            stream.println("  DAY: " + n.getDate().getDayOfMonth());
         } else if (n.getDate().getDayOfMonth() != prev.getDate().getDayOfMonth()) {
-            System.out.println("  DAY: " + n.getDate().getDayOfMonth());
+            stream.println("  DAY: " + n.getDate().getDayOfMonth());
         }
     }
 

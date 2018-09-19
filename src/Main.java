@@ -10,12 +10,12 @@ public class Main {
         todOlist.addNote(2019,1,2,"Celebrate New Year TWICE.");
         todOlist.removeNote(new NoteDate(2019,1,2),"Celebrate New Year TWICE.");
         todOlist.addNote(2021,1,2,"Celebrate New Year ONE MORE TIME.");
-        //todOlist.printAll();
-        //todOlist.printNotesInTheInerval(new NoteDate(2018,1,1),new NoteDate(2020,1,1));
+        todOlist.printAll(System.out);
+       // todOlist.printNotesInTheInerval(new NoteDate(2018,1,1),new NoteDate(2020,1,1),System.out);
 
       todOlist.removeNotesFromInerval(new NoteDate(2017,9,20),new NoteDate(2019,6,20)); //deleting
 
-       todOlist.printAll();
+   //    todOlist.printAll();
 
 
       /* todOlist.addNote(2021,8,25,"Graduate from university!");

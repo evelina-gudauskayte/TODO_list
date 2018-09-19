@@ -58,7 +58,7 @@ public class Note implements Comparable<Note> {
         return memo;
     }
 
-    public String getMemoToPrint() {
+    public String getMemoWithColor() {
         return this.tag + memo + Note.DEFAULT;
     }
 
