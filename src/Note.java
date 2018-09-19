@@ -63,8 +63,12 @@ public class Note implements Comparable<Note>{
     }
 
     public String getMemo() {
+        return memo;
+    }
+    public String getMemoToPrint() {
         return this.tag+memo+Note.DEFAULT;
     }
+
 
     public GregorianCalendar getDate() {
         return date;
