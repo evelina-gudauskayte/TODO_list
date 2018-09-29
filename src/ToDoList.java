@@ -106,6 +106,10 @@ public class ToDoList {
         }
     }
 
+    public void removeNote(int id){
+        list.removeIf(n -> n.getId() == id);
+    }
+
     public void changeMemo(NoteDate date, String memo) {
         Iterator itr = list.iterator();
         while (itr.hasNext()) {

@@ -6,10 +6,17 @@ public class Note implements Comparable<Note> {
     static public String RED = "\u001B[1;31m"; //bright red
     static public String GREEN = "\u001B[1;32m";
     static public String DEFAULT = "\u001B[39;49m";
+    static private int nextID = 0;
 
     private String memo;
     private NoteDate date;
     private String tag = Note.RED;
+    private int id = getNextID();
+
+    private int getNextID(){
+        nextID++;
+        return nextID;
+    }
 
     public Note(int year, int month, int date, String memo) {
         this.date = new NoteDate(year, month, date);
@@ -35,6 +42,8 @@ public class Note implements Comparable<Note> {
                 + this.getDate().getMonth()
                 + "."
                 + this.getDate().getYear()
+                +" Id:"
+                +id
                 + " \nnote: "
                 + this.tag
                 + " "
@@ -59,7 +68,11 @@ public class Note implements Comparable<Note> {
     }
 
     public String getMemoWithColor() {
-        return this.tag + memo + Note.DEFAULT;
+        return "ID:"+id+" "+this.tag + memo + Note.DEFAULT;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public NoteDate getDate() {
