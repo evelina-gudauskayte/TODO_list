@@ -8,34 +8,59 @@ public class ToDoList {
     public ToDoList() {
     }
 
-    public void addNote(int year, int month, int day, String memo) {
-        list.add(new Note(year, month, day, memo));
+    public void addNote(int year, int month, int day, String content) {
+        this.addNote(new NoteDate(year, month, day), content);
     }
 
-    public void addNote(NoteDate date, String memo) {
-        list.add(new Note(date, memo));
+    public void addNote(NoteDate date, String content) {
+        list.add(new Note(date, content));
     }
 
-    public void doneNote(String memo) {
+    public void addNote(Note note) {
+        list.add(note);
+    }
+
+    public void markAsDone(int id) {
         for (Note n : list) {
-            if (n.getMemo().equals(memo)) {
-                n.doneNote();
+            if (n.getId() == id) {
+                n.markAsDone();
             }
         }
     }
 
-    public void printAll(PrintStream stream) {
+    public void printAllNotes(PrintStream stream) {
+        for (Note n : list) {
+            stream.println(n);
+        }
+    }
+
+    public void printPersonalNotes(PrintStream stream) {
+        for (Note n : list) {
+            if (n.getClass() == Note.class) {
+                stream.println(n);
+            }
+        }
+    }
+
+    public void printJointNotes(PrintStream stream) {
+        for (Note n : list) {
+            if (n.getClass() == JointNote.class) {
+                stream.println(n);
+            }
+        }
+    }
+/* public void printAll(PrintStream stream) {
         Iterator<Note> itr = list.iterator();
         if (itr.hasNext()) {
             Note prev = itr.next();
             stream.println("YEAR: " + prev.getDate().getYear());
             stream.println(" MONTH: " + prev.getDate().getMonth());
             stream.println("  DAY: " + prev.getDate().getDayOfMonth());
-            stream.println("   " + prev.getMemoWithColor());
+            stream.println("   " + prev.getcontentWithColor());
             while (itr.hasNext()) {
                 Note n = itr.next();
                 printList(prev, n, stream);
-                stream.println("   " + n.getMemoWithColor());
+                stream.println("   " + n.getcontentWithColor());
                 prev = n;
             }
         }
@@ -50,12 +75,12 @@ public class ToDoList {
                 stream.println("YEAR: " + prev.getDate().getYear());
                 stream.println(" MONTH: " + prev.getDate().getMonth());
                 stream.println("  DAY: " + prev.getDate().getDayOfMonth());
-                stream.println("   " + prev.getMemoWithColor());
+                stream.println("   " + prev.getcontentWithColor());
                 while (itr.hasNext()) {
                     Note n = (Note) itr.next();
                     if (n.getDate().compareTo(date2) <= 0) {
                         printList(prev, n, stream);
-                        stream.println("   " + n.getMemoWithColor());
+                        stream.println("   " + n.getcontentWithColor());
                         prev = n;
                     }
                 }
@@ -90,34 +115,32 @@ public class ToDoList {
             }
         }
 
-    }
+    }*/
 
-    public void removeNote(NoteDate date, String memo) {
+    public void removeNote(NoteDate date, String content) {
         Iterator<Note> itr = list.iterator();
         while (itr.hasNext()) {
             Note n = itr.next();
             if (date.getYear() == n.getDate().getYear()
                     && date.getMonth() == n.getDate().getMonth()
                     && date.getDayOfMonth() == n.getDate().getDayOfMonth()
-                    && n.getMemo() == memo) {
+                    && n.getContent().equals(content)) {
                 itr.remove();
                 return;
             }
         }
     }
 
-    public void removeNote(int id){
+    public void removeNote(int id) {
         list.removeIf(n -> n.getId() == id);
     }
 
-    public void changeMemo(NoteDate date, String memo) {
+    public void changecontent(int id, String content) {
         Iterator itr = list.iterator();
         while (itr.hasNext()) {
             Note n = (Note) itr.next();
-            if (date.getYear() == n.getDate().getYear()
-                    && date.getMonth() == n.getDate().getMonth()
-                    && date.getDayOfMonth() == n.getDate().getDayOfMonth()) {
-                n.changeMemo(memo);
+            if (n.getId() == id) {
+                n.changeContent(content);
                 return;
             }
         }
