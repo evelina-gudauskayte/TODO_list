@@ -1,10 +1,11 @@
+package TODO;
+
 import java.io.PrintStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class User {
 
@@ -13,7 +14,7 @@ public class User {
     private int id = getNextID();
     private String userName;
     private String userPassword;
-    private ToDoList toDoList = new ToDoList();
+    private ToDoList toDoList = new ToDoList(this);
     private ArrayList<String> friends = new ArrayList<String>();
     private boolean status = false; //notification before getting in note, if status id true then notes will be added to list without any notification
 
@@ -34,8 +35,13 @@ public class User {
     public void addNote(NoteDate date, String content) {
         toDoList.addNote(date, content);
     }
-    public void addNote(Note note){
+
+    public void addNote(Note note) {
         toDoList.addNote(note);
+    }
+
+    public void addUserToNote(int id, User user){
+        toDoList.addUserToNote(id,user);
     }
 
     public void printNotes(PrintStream stream) {
@@ -46,8 +52,12 @@ public class User {
         toDoList.printJointNotes(stream);
     }
 
-    public void printPersonalNotes(PrintStream stream) {
-        toDoList.printPersonalNotes(stream);
+    public void printSingleNotes(PrintStream stream) {
+        toDoList.printSingleNotes(stream);
+    }
+
+    public void removeNote(int id){
+        toDoList.removeNote(id);
     }
 
     public boolean isStatus() {
@@ -58,7 +68,7 @@ public class User {
         return userName;
     }
 
-    //create a notice system
+    //create a notification system
     public boolean checkFriend(User user) {
         for (String name : friends) {
             if (user.getUserName().equals(name)) {

@@ -1,35 +1,36 @@
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+package TODO;
 
 public class Note implements Comparable<Note> {
 
-    static public String RED = "\u001B[1;31m"; //bright red
+    /*static public String RED = "\u001B[1;31m"; //bright red
     static public String GREEN = "\u001B[1;32m";
     static public String YELLOW = "\u001B[1;33m";
-    static public String DEFAULT = "\u001B[39;49m";
+    static public String DEFAULT = "\u001B[39;49m";*/
     static private int nextID = 0;
 
     private String content;
     private NoteDate date;
-    private String tag = Note.RED;
+    private User creator;
+    //private String tag = Note.RED;
     private int noteStatus = -1;
     private int id = getNextID();
-    private boolean personal = true;
+    private boolean isPersonal = true;
 
     private int getNextID() {
         nextID++;
         return nextID;
     }
 
-    public Note(String content) {
-        this(new NoteDate(), content);
+    public Note(String content, User creator) {
+        this(new NoteDate(), content, creator);
     }
 
-    public Note(int year, int month, int day, String content) {
-        this(new NoteDate(year, month, day), content);
+    public Note(int year, int month, int day, String content, User creator) {
+        this(new NoteDate(year, month, day), content, creator);
     }
 
-    public Note(NoteDate date, String content) {
+    public Note(NoteDate date, String content,User creator) {
+        this.creator=creator;
         this.date = date;
         this.content = content;
     }
@@ -64,21 +65,16 @@ public class Note implements Comparable<Note> {
                 + " Id:"
                 + id
                 + " \nnote: "
-                + this.tag
-                + " "
                 + this.getContent())
-                + Note.DEFAULT
                 +"\n Note is "
                 +status;
     }
 
     public void markAsDone() {
-        this.tag = Note.GREEN;
         noteStatus = 1;
     }
 
     public void markAsInProgress() {
-        this.tag = Note.YELLOW;
         noteStatus = 0;
     }
 
@@ -94,15 +90,15 @@ public class Note implements Comparable<Note> {
         return content;
     }
 
-    public String getContentWithColor() {
-        return "ID:" + id + " " + this.tag + content + Note.DEFAULT;
-    }
-
     public int getId() {
         return id;
     }
 
     public NoteDate getDate() {
         return date;
+    }
+
+    public User getCreator() {
+        return creator;
     }
 }

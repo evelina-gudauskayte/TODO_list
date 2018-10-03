@@ -1,15 +1,18 @@
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.ui.ModelMap;
+package TODO;
+import DataBase.SQLiteJDBCDriverConnection;
+
+import java.sql.Connection;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.sql.DriverManager;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        SQLiteJDBCDriverConnection.connect();
 
        PrintStream stream = null;
         try {
