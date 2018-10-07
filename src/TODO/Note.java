@@ -18,7 +18,7 @@ public class Note implements Comparable<Note> {
 
     private int getNextID() {
         nextID++;
-        return nextID;
+        return ++nextID;
     }
 
     public Note(String content, User creator) {

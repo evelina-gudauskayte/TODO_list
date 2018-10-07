@@ -32,6 +32,14 @@ public class User {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
     public void addNote(NoteDate date, String content) {
         toDoList.addNote(date, content);
     }
@@ -89,7 +97,7 @@ public class User {
         return false;
     }
 
-    private String hashPassword(String password) throws NoSuchAlgorithmException {
+    public staticalv String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();

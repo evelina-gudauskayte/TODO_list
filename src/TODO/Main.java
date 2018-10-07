@@ -1,27 +1,27 @@
 package TODO;
-import DataBase.SQLiteJDBCDriverConnection;
 
-import java.sql.Connection;
+import DataBase.AddUser;
+import DataBase.Select;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.sql.DriverManager;
+import java.security.NoSuchAlgorithmException;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        SQLiteJDBCDriverConnection.connect();
-
-       PrintStream stream = null;
-        try {
-            stream = new PrintStream(new File("D:\\JavaPrioects\\TODO_list\\src\\test.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+       // Enter enter = new Enter();
+       // enter.start();
         User alice = new User("Alice","password");
         User bob = new User("Bob","password");
+        AddUser add = new AddUser();
+        //add.addUser(alice);
+        Select select = new Select();
+        //add.addUser(bob);
+        select.selectAll();
+        try {
+            select.selectUser("Bob",User.hashPassword("password"));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         alice.addNote(new NoteDate(), "Make a tea");
         alice.addNote(new NoteDate(),"Push to GitHub");
         alice.addNote(new NoteDate(2017,8,26), "Note2");
