@@ -10,7 +10,7 @@ public class JointNote extends Note {
         super(date,content,creator);
         users.add(new Pair<>(creator, -1));
     }
-    public JointNote(Note note){
+   /* public JointNote(Note note){
         super(note.getDate(),note.getContent(), note.getCreator());
         users.add(new Pair<>(note.getCreator(),-1));
     }
@@ -45,5 +45,5 @@ public class JointNote extends Note {
                 + this.getContent()
                 +"\n     "
                 +str);
-    }
+    }*/
 }

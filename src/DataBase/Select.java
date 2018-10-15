@@ -14,7 +14,7 @@ public class Select {
         }
         return conn;
     }
-    public void selectUser( String username,  String password){
+    public void PrintUser( String username,  String password){
         String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
         try (Connection connection = this.connect();
              PreparedStatement statement = connection.prepareStatement(sql)){

@@ -1,28 +1,27 @@
 package TODO;
 
-import java.io.PrintStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class User {
 
-    private static int nextId = 1;
+    private static AtomicInteger nextId =new AtomicInteger(1);
 
-    private int id = getNextID();
+    private int id = nextId.incrementAndGet();
     private String userName;
     private String userPassword;
-    private ToDoList toDoList = new ToDoList(this);
-    private ArrayList<String> friends = new ArrayList<String>();
-    private boolean status = false; //notification before getting in note, if status id true then notes will be added to list without any notification
 
-    private static int getNextID() {
-        nextId++;
-        return nextId;
+    @Override
+    public boolean equals(Object object){
+        User user = (User) object;
+        if(user.getUserName().equals(userName) && user.getUserPassword().equals(userPassword)){
+            return true;
+        }
+        return false;
     }
-
     public User(String name, String password) {
         userName = name;
         try {
@@ -40,64 +39,11 @@ public class User {
         return userPassword;
     }
 
-    public void addNote(NoteDate date, String content) {
-        toDoList.addNote(date, content);
-    }
-
-    public void addNote(Note note) {
-        toDoList.addNote(note);
-    }
-
-    public void addUserToNote(int id, User user){
-        toDoList.addUserToNote(id,user);
-    }
-
-    public void printNotes(PrintStream stream) {
-        toDoList.printAllNotes(stream);
-    }
-
-    public void printJointNotes(PrintStream stream) {
-        toDoList.printJointNotes(stream);
-    }
-
-    public void printSingleNotes(PrintStream stream) {
-        toDoList.printSingleNotes(stream);
-    }
-
-    public void removeNote(int id){
-        toDoList.removeNote(id);
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
     public String getUserName() {
         return userName;
     }
 
-    //create a notification system
-    public boolean checkFriend(User user) {
-        for (String name : friends) {
-            if (user.getUserName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean enterSystem(String name, String password) {
-        try {
-            if (name.equals(this.userName) && hashPassword(password).equals(this.userPassword)) {
-                return true;
-            }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public staticalv String hashPassword(String password) throws NoSuchAlgorithmException {
+    public static String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();

@@ -13,6 +13,6 @@ public class DeleteNoteCommand implements Command{
 
     @Override
     public void execute() {
-        user.removeNote(id);
+        //user.removeNote(id);
     }
 }

@@ -1,34 +1,43 @@
 package TODO;
 
 import java.io.PrintStream;
-import java.util.*;
+import java.util.Iterator;
+import java.util.TreeSet;
+import java.util.function.Predicate;
 
-public class ToDoList {
+public class ToDoList { //singleton
+    private static ToDoList toDoList;
     private TreeSet<Note> list = new TreeSet<>();
-    private User creator;
-    public ToDoList(User creator){
-        this.creator=creator;
+
+    static {
+        toDoList = new ToDoList();
     }
 
-    public void addNote(int year, int month, int day, String content) {
-        this.addNote(new NoteDate(year, month, day), content);
+    private ToDoList(){}
+
+    public static ToDoList getToDoList() {
+        return toDoList;
     }
 
-    public void addNote(NoteDate date, String content) {
-        list.add(new Note(date, content,this.creator));
+    public void addNote(int year, int month, int day, String content, User creator) {
+        this.addNote(new NoteDate(year, month, day), content, creator);
+    }
+
+    public void addNote(NoteDate date, String content, User creator) {
+        list.add(new Note(date, content,creator));
     }
 
     public void addNote(Note note) {
         list.add(note);
     }
 
-    public void addUserToNote(int id, User user) {
+    /*public void addUserToNote(int id, User user) {
         for (Note n : list) {
             if (n.getId() == id && n instanceof JointNote){
                 ((JointNote) n).addUser(user);
             }
         }
-    }
+    }*/
 
     public void markAsDone(int id) {
         for (Note n : list) {
@@ -38,7 +47,26 @@ public class ToDoList {
         }
     }
 
-    public void printAllNotes(PrintStream stream) {
+    private static Predicate<Note> belongsToPredicate(User user){
+        return p -> p.getCreator().equals(user);
+    }
+    private static Predicate<Note> allNotesPredicate(){
+        return p -> true;
+    }
+
+    public void printNotes(User user, PrintStream stream, Predicate<Note> predicate){
+        if(predicate == null){
+            predicate=allNotesPredicate();
+        }
+        for(Note n: list){
+            if(predicate.test(n) && belongsToPredicate(user).test(n)){
+                stream.println(n);
+            }
+        }
+
+    }
+
+/*    public void printAllNotes(PrintStream stream) {
         for (Note n : list) {
             stream.println(n);
         }
@@ -69,7 +97,7 @@ public class ToDoList {
                 stream.println(n);
             }
         }
-    }
+    }*/
 
     public void removeNotesFromInerval(NoteDate date1, NoteDate date2) {
         Iterator<Note> iterator = list.iterator();

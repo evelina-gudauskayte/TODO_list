@@ -1,25 +1,17 @@
 package TODO;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Note implements Comparable<Note> {
 
-    /*static public String RED = "\u001B[1;31m"; //bright red
-    static public String GREEN = "\u001B[1;32m";
-    static public String YELLOW = "\u001B[1;33m";
-    static public String DEFAULT = "\u001B[39;49m";*/
-    static private int nextID = 0;
+    static private AtomicInteger nextID = new AtomicInteger(0);
 
     private String content;
     private NoteDate date;
-    private User creator;
-    //private String tag = Note.RED;
     private int noteStatus = -1;
-    private int id = getNextID();
+    private int id = nextID.incrementAndGet();
     private boolean isPersonal = true;
-
-    private int getNextID() {
-        nextID++;
-        return ++nextID;
-    }
+    private User creator; //or we can hold an id of user
 
     public Note(String content, User creator) {
         this(new NoteDate(), content, creator);
@@ -29,8 +21,8 @@ public class Note implements Comparable<Note> {
         this(new NoteDate(year, month, day), content, creator);
     }
 
-    public Note(NoteDate date, String content,User creator) {
-        this.creator=creator;
+    public Note(NoteDate date, String content, User creator) {
+        this.creator = creator;
         this.date = date;
         this.content = content;
     }
@@ -62,11 +54,11 @@ public class Note implements Comparable<Note> {
         }
         return ("Deadline at: "
                 +date
-                + " Id:"
+                + "\n    Id:"
                 + id
-                + " \nnote: "
+                + "\n     note: "
                 + this.getContent())
-                +"\n Note is "
+                + "\n      Note is "
                 +status;
     }
 
@@ -97,8 +89,11 @@ public class Note implements Comparable<Note> {
     public NoteDate getDate() {
         return date;
     }
-
-    public User getCreator() {
+    public User getCreator(){
         return creator;
+    }
+
+    public boolean isPersonal() {
+        return isPersonal;
     }
 }

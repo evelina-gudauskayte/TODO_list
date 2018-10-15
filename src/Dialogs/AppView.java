@@ -24,11 +24,21 @@ public class AppView  {
 
 
         frame.getContentPane().add(panel);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(400,400);
        // frame.pack();
+
         frame.setVisible(true);
+     /*   while (frame.isVisible()){
+
+        }*/
+        System.out.println("done");
+       // System.exit(0);
 
     }
+    public static void main(String[] args) {
+        AppView app = new AppView();
+        app.createWindow();
 
+    }
 }
