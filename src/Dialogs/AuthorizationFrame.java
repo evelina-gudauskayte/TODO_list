@@ -1,6 +1,7 @@
 package Dialogs;
 
 import DataBase.Authorization;
+import TODO.User;
 
 import javax.swing.*;
 
@@ -10,7 +11,7 @@ public class AuthorizationFrame {
 
     public AuthorizationFrame(){    }
 
-    public boolean StartAuthorizationDialog(){
+    public User StartAuthorizationDialog(){
         final JComponent[] inputs = new JComponent[] {
                 new JLabel("Username"),
                 usernameField,
@@ -24,7 +25,7 @@ public class AuthorizationFrame {
                 System.out.println(usernameField.getText() + " "+ new String(passwordField.getPassword()));
                 if (authorization.authorize(usernameField.getText(), new String(passwordField.getPassword()))){
                     System.out.println("authorized");
-                    return true;
+                    return new User(usernameField.getText(), new String(passwordField.getPassword()));
                 }else{
                     JOptionPane.showMessageDialog(null,"Wrong username or password");
                 }
@@ -32,7 +33,7 @@ public class AuthorizationFrame {
                 break;
             }
         }
-        return false;
+        return null;
     }
 
     public static void main(String[] args){

@@ -17,7 +17,7 @@ public class User {
     @Override
     public boolean equals(Object object){
         User user = (User) object;
-        if(user.getUserName().equals(userName) && user.getUserPassword().equals(userPassword)){
+        if(user.getUserName().equalsIgnoreCase(userName) && user.getUserPassword().equals(userPassword)){
             return true;
         }
         return false;

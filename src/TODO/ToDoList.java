@@ -1,6 +1,7 @@
 package TODO;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.function.Predicate;
@@ -64,6 +65,15 @@ public class ToDoList { //singleton
             }
         }
 
+    }
+    public ArrayList<Note> getUsersNotes(User user, Predicate<Note> predicate){
+        ArrayList<Note> notes = new ArrayList<>();
+        for(Note n: list){
+            if(predicate.test(n) && belongsToPredicate(user).test(n)){
+                notes.add(n);
+            }
+        }
+        return notes;
     }
 
 /*    public void printAllNotes(PrintStream stream) {

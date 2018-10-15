@@ -70,11 +70,11 @@ public class Note implements Comparable<Note> {
         noteStatus = 0;
     }
 
-    protected void addContent(String content) {
+    public void addContent(String content) {
         this.content = this.getContent() + "\n" + content;
     }
 
-    protected void changeContent(String content) {
+    public void changeContent(String content) {
         this.content = content;
     }
 
