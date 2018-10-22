@@ -1,7 +1,7 @@
 package Dialogs;
 
 import TODO.Note;
-import TODO.User;
+import TODO.ToDoList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class NotePanel extends JPanel {
+    private MainFrame mainFrame;
     private final int sizeOfRow = 25;
     private Note note;
     private JLabel titleOfNote ;
@@ -17,15 +18,16 @@ public class NotePanel extends JPanel {
     private JButton deleteNote;
     private JButton okButton = new JButton("ok");
     private JButton cancelButton = new JButton("cancel");
-    public NotePanel(Note note){
+    public NotePanel(Note note, MainFrame mainFrame){
+        this.mainFrame = mainFrame;
         setLayout(new GridLayout(0,1));
         this.note=note;
-         titleOfNote = new JLabel(note.getId()+":"+note.getDate().toString());
-         content = new JTextArea(note.getContent(),note.getContent().length()/sizeOfRow,sizeOfRow);
-         content.setEditable(false);
-         content.setLineWrap(true);
-         okButton.setVisible(false);
-         cancelButton.setVisible(false);
+        titleOfNote = new JLabel(note.getId()+":"+note.getDate().toString());
+        content = new JTextArea(note.getContent(),note.getContent().length()/sizeOfRow,sizeOfRow);
+        content.setEditable(false);
+        content.setLineWrap(true);
+        okButton.setVisible(false);
+        cancelButton.setVisible(false);
 
         editButton = new JButton("Edit");
         editButton.addActionListener(new ActionListener() {
@@ -38,10 +40,8 @@ public class NotePanel extends JPanel {
                 cancelButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
-                        //content = new JTextArea(note.getContent(), note.getContent().length()/sizeOfRow,sizeOfRow);
                         content.setText(note.getContent());
                         content.setEditable(false);
-                        //content.updateUI();
                         okButton.setVisible(false);
                         cancelButton.setVisible(false);
                     }
@@ -57,7 +57,22 @@ public class NotePanel extends JPanel {
                 });
             }
         });
-         deleteNote = new JButton("Delete");
+        deleteNote = new JButton("Delete");
+        deleteNote.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int result = JOptionPane.showConfirmDialog(null,
+                        new JLabel("Do you really want to delete it?"),
+                        "Deleting",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null);
+                if(result == JOptionPane.YES_OPTION){
+                    ToDoList.getToDoList().removeNote(note);
+                    mainFrame.update();
+                }
+            }
+        });
         add(titleOfNote);
         add(content);
         JPanel buttons = new JPanel();
@@ -69,7 +84,7 @@ public class NotePanel extends JPanel {
         add(buttons);
     }
 
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         NotePanel panel1= new NotePanel(new Note("message1",new User("bob", "pass")));
         NotePanel panel2= new NotePanel(new Note("message2",new User("bob", "pass")));
         NotePanel panel3= new NotePanel(new Note("message3",new User("bob", "pass")));
@@ -85,5 +100,5 @@ public class NotePanel extends JPanel {
         frame.pack();
         frame.setVisible(true);
 
-    }
+    }*/
 }

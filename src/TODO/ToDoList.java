@@ -136,6 +136,9 @@ public class ToDoList { //singleton
             }
         }
     }
+    public void removeNote(Note note){
+        list.remove(note);
+    }
 
     public void removeNote(int id) {
         list.removeIf(n -> n.getId() == id);

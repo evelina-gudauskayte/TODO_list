@@ -10,8 +10,14 @@ public class AuthorizationDialog extends JDialog {
     private JButton registerButton = new JButton("Registration");
     public AuthorizationDialog(JFrame owner){
         super(owner, "Authorization", true);
+       /* enterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });*/
         JPanel panel = new JPanel();
-        //panel.add(Box.createRigidArea(new Dimension(10,0));
+      //  panel.add(Box.createRigidArea(new Dimension(10,0)));
         panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
         panel.add(enterButton);
         panel.add(registerButton);
