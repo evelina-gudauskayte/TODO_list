@@ -1,0 +1,20 @@
+CREATE TABLE users (
+	id INTEGER NOT NULL,
+	name TEXT(50) NOT NULL,
+	password TEXT(50) NOT NULL,
+	PRIMARY KEY (id)
+);
+CREATE TABLE notes(
+	id INTEGER NOT NULL,
+	userId INTEGER NOT NULL,
+	content TEXT NOT NULL,
+	isJoint INTEGER DEFAULT 0,
+	PRIMARY KEY (id)
+	foreign key (userId) REFERENCES  users(id)
+);
+CREATE TABLE jointNotes(
+	noteId INTEGER NOT NULL,
+	userId INTEGER NOT NULL,
+	foreign key (userId) REFERENCES  users(id)
+	foreign key (noteId) REFERENCES  notes(id)
+);

@@ -8,7 +8,6 @@ public class Main {
 
         User alice = new User("Alice","password");
         User bob = new User("Bob","password");
-//        AddUser add = new AddUser();
 //        Select select = new Select();;
 
         ToDoList.getToDoList().addNote(new NoteDate(1012,06,12), "first note", alice);
