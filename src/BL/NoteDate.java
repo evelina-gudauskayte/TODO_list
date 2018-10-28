@@ -1,4 +1,4 @@
-package TODO;
+package BL;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -15,29 +15,29 @@ public class NoteDate implements Comparable<NoteDate> {
     }
 
     @Override
-    public int compareTo(NoteDate date2 ){
+    public int compareTo(NoteDate date2) {
         return this.date.compareTo(date2.date);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return ("Year:"
-                +this.date.get(Calendar.YEAR)
-                +"\n Month:"
-                +this.date.get(Calendar.MONTH)
-                +"\n  Day:"
-                +this.date.get(Calendar.DAY_OF_MONTH));
+                + this.date.get(Calendar.YEAR)
+                + "\n Month:"
+                + this.date.get(Calendar.MONTH)
+                + "\n  Day:"
+                + this.date.get(Calendar.DAY_OF_MONTH));
     }
 
-    public int getYear(){
+    public int getYear() {
         return this.date.get(Calendar.YEAR);
     }
 
-    public int getMonth(){
+    public int getMonth() {
         return this.date.get(Calendar.MONTH);
     }
 
-    public int getDayOfMonth(){
+    public int getDayOfMonth() {
         return this.date.get(Calendar.DAY_OF_MONTH);
     }
 }

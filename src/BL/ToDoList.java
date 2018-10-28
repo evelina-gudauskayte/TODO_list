@@ -1,4 +1,4 @@
-package TODO;
+package BL;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
-public class ToDoList { //singleton
+/*public class ToDoList { //singleton
     private static ToDoList toDoList;
     private TreeSet<Note> list = new TreeSet<>();
 
@@ -40,7 +40,7 @@ public class ToDoList { //singleton
         }
     }*/
 
-    public void markAsDone(int id) {
+  /*  public void markAsDone(int id) {
         for (Note n : list) {
             if (n.getId() == id) {
                 n.markAsDone();
@@ -109,7 +109,7 @@ public class ToDoList { //singleton
         }
     }*/
 
-    public void removeNotesFromInerval(NoteDate date1, NoteDate date2) {
+  /*  public void removeNotesFromInerval(NoteDate date1, NoteDate date2) {
         Iterator<Note> iterator = list.iterator();
         while (iterator.hasNext()) {
             Note n = iterator.next();
@@ -155,4 +155,4 @@ public class ToDoList { //singleton
         }
 
     }
-}
+}*/

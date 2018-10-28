@@ -1,4 +1,6 @@
-package TODO;
+package BL;
+
+import DAL.NoteDTO;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,20 +13,27 @@ public class Note implements Comparable<Note> {
     private int noteStatus = -1;
     private int id = nextID.incrementAndGet();
     private boolean isPersonal = true;
-    private User creator; //or we can hold an id of user
+    //private User creator; //or we can hold an id of user
 
     public Note(String content, User creator) {
-        this(new NoteDate(), content, creator);
+        this(new NoteDate(), content);
     }
 
-    public Note(int year, int month, int day, String content, User creator) {
-        this(new NoteDate(year, month, day), content, creator);
+    public Note(int year, int month, int day, String content) {
+        this(new NoteDate(year, month, day), content);
     }
 
-    public Note(NoteDate date, String content, User creator) {
-        this.creator = creator;
+    public Note(NoteDate date, String content) {
+        //this.creator = creator;
         this.date = date;
         this.content = content;
+    }
+
+    public Note(NoteDTO noteDTO) {
+        this.id = noteDTO.getId();
+        this.content = noteDTO.getContent();
+        //this.creator = creator;
+        this.date = new NoteDate(noteDTO.getYear(),noteDTO.getMonth(), noteDTO.getDay());
     }
 
     @Override
@@ -53,13 +62,13 @@ public class Note implements Comparable<Note> {
             status = "in the process";
         }
         return ("Deadline at: "
-                +date
+                + date
                 + "\n    Id:"
                 + id
                 + "\n     note: "
                 + this.getContent())
                 + "\n      Note is "
-                +status;
+                + status;
     }
 
     public void markAsDone() {
@@ -89,9 +98,10 @@ public class Note implements Comparable<Note> {
     public NoteDate getDate() {
         return date;
     }
-    public User getCreator(){
+
+   /* public User getCreator() {
         return creator;
-    }
+    }*/
 
     public boolean isPersonal() {
         return isPersonal;

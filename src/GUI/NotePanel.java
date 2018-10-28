@@ -1,7 +1,8 @@
-package Dialogs;
+package GUI;
 
-import TODO.Note;
-import TODO.ToDoList;
+import BL.Note;
+import BL.Session;
+//import BL.ToDoList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class NotePanel extends JPanel {
-    private MainFrame mainFrame;
     private final int sizeOfRow = 25;
     private Note note;
     private JLabel titleOfNote ;
@@ -18,11 +18,11 @@ public class NotePanel extends JPanel {
     private JButton deleteNote;
     private JButton okButton = new JButton("ok");
     private JButton cancelButton = new JButton("cancel");
-    public NotePanel(Note note, MainFrame mainFrame){
-        this.mainFrame = mainFrame;
+    public NotePanel(Note note, MainFrame mainFrame, Session session){
+        //this.mainFrame = mainFrame;
         setLayout(new GridLayout(0,1));
         this.note=note;
-        titleOfNote = new JLabel(note.getId()+":"+note.getDate().toString());
+        titleOfNote = new JLabel(note.getDate().toString());
         content = new JTextArea(note.getContent(),note.getContent().length()/sizeOfRow,sizeOfRow);
         content.setEditable(false);
         content.setLineWrap(true);
@@ -68,7 +68,7 @@ public class NotePanel extends JPanel {
                         JOptionPane.PLAIN_MESSAGE,
                         null);
                 if(result == JOptionPane.YES_OPTION){
-                    ToDoList.getToDoList().removeNote(note);
+                    session.deleteNote(note.getId());
                     mainFrame.update();
                 }
             }

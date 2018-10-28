@@ -1,6 +1,6 @@
 CREATE TABLE users (
 	id INTEGER NOT NULL,
-	name TEXT(50) NOT NULL,
+	username TEXT(50) NOT NULL UNIQUE,
 	password TEXT(50) NOT NULL,
 	PRIMARY KEY (id)
 );
