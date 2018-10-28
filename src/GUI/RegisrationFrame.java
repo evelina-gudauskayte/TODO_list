@@ -1,14 +1,13 @@
 package GUI;
 
-import BL.LogInManager;
-import DESIGN.DesignedButton;
+import BL.Managers.LogInManager;
 import DESIGN.DesignedFrames;
-import DESIGN.RoundedBorder;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 public class RegisrationFrame extends DesignedFrames {
 
@@ -38,9 +37,12 @@ public class RegisrationFrame extends DesignedFrames {
                 if(userPass.equals(new String(confirmPassword.getPassword())) && !userPass.isEmpty() && !username.getText().isEmpty()){
                     if(LogInManager.addNewUser(username.getText(),userPass)){
                         JOptionPane.showMessageDialog(null,"Successfully registered");
+                        close();
                     }else {
                         JOptionPane.showMessageDialog(null,"Please try another username");
                     }
+                }else {
+                    JOptionPane.showMessageDialog(null,"Passwords are different");
                 }
             }
         });
@@ -49,6 +51,9 @@ public class RegisrationFrame extends DesignedFrames {
         setLocation(MainFrame.screenWidth/2 - this.getWidth()/2, MainFrame.screenHeight/2-this.getHeight()/2);
         setVisible(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    public void close() {
+        this.dispatchEvent((new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
     }
     public static void main(String[] args){
         RegisrationFrame regisrationFrame = new RegisrationFrame();

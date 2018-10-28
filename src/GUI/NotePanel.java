@@ -1,7 +1,9 @@
 package GUI;
 
+import BL.JointNote;
+import BL.Managers.JointNoteManager;
 import BL.Note;
-import BL.Session;
+import BL.Managers.Session;
 //import BL.ToDoList;
 
 import javax.swing.*;
@@ -20,6 +22,7 @@ public class NotePanel extends JPanel {
     private JButton cancelButton = new JButton("cancel");
     public NotePanel(Note note, MainFrame mainFrame, Session session){
         //this.mainFrame = mainFrame;
+
         setLayout(new GridLayout(0,1));
         this.note=note;
         titleOfNote = new JLabel(note.getDate().toString());
@@ -69,7 +72,7 @@ public class NotePanel extends JPanel {
                         null);
                 if(result == JOptionPane.YES_OPTION){
                     session.deleteNote(note.getId());
-                    mainFrame.update();
+                    mainFrame.updateNotes();
                 }
             }
         });
@@ -81,24 +84,17 @@ public class NotePanel extends JPanel {
         buttons.add(deleteNote);
         buttons.add(okButton);
         buttons.add(cancelButton);
+        if(note instanceof JointNote){
+            JointNoteManager manager = new JointNoteManager();
+            StringBuilder names = new StringBuilder();
+            for(String n : manager.getNamesOfJointNoteUsers((JointNote) note)){
+                names.append(n).append(" ");
+            }
+            JTextArea area = new JTextArea(names.toString());
+            area.setEditable(false);
+            add(area);
+        }
         add(buttons);
+
     }
-
-    /*public static void main(String[] args){
-        NotePanel panel1= new NotePanel(new Note("message1",new User("bob", "pass")));
-        NotePanel panel2= new NotePanel(new Note("message2",new User("bob", "pass")));
-        NotePanel panel3= new NotePanel(new Note("message3",new User("bob", "pass")));
-        JPanel newPanel = new JPanel();
-        newPanel.setLayout(new GridLayout(0,2));
-        newPanel.add(panel1);
-        newPanel.add(panel2);
-        newPanel.add(panel3);
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //frame.setLayout();
-        frame.add(newPanel);
-        frame.pack();
-        frame.setVisible(true);
-
-    }*/
 }

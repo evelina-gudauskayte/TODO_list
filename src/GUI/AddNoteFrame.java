@@ -1,14 +1,16 @@
 package GUI;
 
+import BL.JointNote;
 import BL.Note;
 import BL.NoteDate;
-import BL.Session;
+import BL.Managers.Session;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class AddNoteFrame extends JFrame {
     private Session session = null;
@@ -36,12 +38,21 @@ public class AddNoteFrame extends JFrame {
         create.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                NoteDate date;
                 if(year.getText().isEmpty()){
-                    session.addNote(new Note(content.getText(),session.getCurrentUser()));
+                    date = new NoteDate();
                 }else {
-                    session.addNote(new Note(new NoteDate(Integer.parseInt(year.getText()), Integer.parseInt(month.getText()), Integer.parseInt(day.getText())), content.getText()));
+                    date = new NoteDate(Integer.parseInt(year.getText()), Integer.parseInt(month.getText()),Integer.parseInt(day.getText( )));
                 }
-                mainFrame.update();
+                if(isJoint.isSelected()){
+                    JointNote jointNote = new JointNote(date, content.getText(),new ArrayList<>());
+                    session.addNote(jointNote);
+                    SelectUsersFrame selectUsersFrame = new SelectUsersFrame(jointNote);
+                    selectUsersFrame.launch();
+                }else {
+                    session.addNote(new Note(date, content.getText()));
+                }
+                mainFrame.updateNotes();
                 close();
             }
         });
@@ -56,6 +67,10 @@ public class AddNoteFrame extends JFrame {
         setVisible(true);
     }
     public void close(){
+        content.setText("");
+        year.setText("");
+        month.setText("");
+        day.setText("");
         this.dispatchEvent((new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
     }
 

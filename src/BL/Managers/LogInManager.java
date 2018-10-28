@@ -1,5 +1,6 @@
-package BL;
+package BL.Managers;
 
+import BL.User;
 import DAL.*;
 
 import java.math.BigInteger;
@@ -45,12 +46,6 @@ public class LogInManager {
             return null;
         }
         return new User(userDTO);
-    }
-
-    public static void main(String[] args) {
-        LogInManager logInManager = new LogInManager();
-        logInManager.addNewUser("Alice", "password");
-        logInManager.addNewUser("Bob", "password");
     }
 
 }

@@ -52,10 +52,10 @@ public class User {
 
     //сделать изменение пароля, логина.
 
-    public static String hashPassword(String password) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(password.getBytes(StandardCharsets.UTF_8));
-        byte[] digest = md.digest();
-        return String.format("%064x", new BigInteger(1, digest));
-    }
+//    public static String hashPassword(String password) throws NoSuchAlgorithmException {
+//        MessageDigest md = MessageDigest.getInstance("SHA-256");
+//        md.update(password.getBytes(StandardCharsets.UTF_8));
+//        byte[] digest = md.digest();
+//        return String.format("%064x", new BigInteger(1, digest));
+//    }
 }

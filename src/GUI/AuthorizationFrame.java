@@ -1,7 +1,6 @@
 package GUI;
 
-import BL.LogInManager;
-import BL.Session;
+import BL.Managers.LogInManager;
 import BL.User;
 import DESIGN.DesignedFrames;
 
@@ -9,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 public class AuthorizationFrame extends DesignedFrames {
     private JTextField usernameField = new JTextField();
@@ -23,8 +23,8 @@ public class AuthorizationFrame extends DesignedFrames {
             public void actionPerformed(ActionEvent e) {
                 User user = LogInManager.authorizeUser(usernameField.getText(), new String(passwordField.getPassword()));
                 if (user != null) {
-                    MainFrame mainFrame = new MainFrame(user);
-                    mainFrame.launch();
+                    MainFrame mainFrame = new MainFrame();
+                    mainFrame.authorize(user);// launch
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong username or password");
@@ -36,7 +36,6 @@ public class AuthorizationFrame extends DesignedFrames {
             public void actionPerformed(ActionEvent e) {
                 RegisrationFrame regisrationFrame = new RegisrationFrame();
                 regisrationFrame.launch();
-                regisrationFrame.setVisible(false);
             }
         });
         JPanel panel = new JPanel();
@@ -57,10 +56,12 @@ public class AuthorizationFrame extends DesignedFrames {
     public void launch(){
         setVisible(true);
     }
+    public void close() {
+        this.dispatchEvent((new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
+    }
 
     public static void main(String[] args){
         AuthorizationFrame authorizationFrame = new AuthorizationFrame();
         authorizationFrame.launch();
-
     }
 }

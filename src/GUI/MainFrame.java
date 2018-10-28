@@ -1,6 +1,6 @@
 package GUI;
 
-import BL.Session;
+import BL.Managers.Session;
 import BL.User;
 
 import javax.swing.*;
@@ -15,11 +15,9 @@ public class MainFrame extends JFrame {
 
     private Session session;
     AddNoteFrame addNoteFrame = new AddNoteFrame(this);
-    //User currentUser;
 
-    public MainFrame(User user) {
-        //this.currentUser = user;
-        this.session = new Session(user);
+    public MainFrame() {
+        setLocation(MainFrame.screenWidth / 2 - this.getWidth() / 2, MainFrame.screenHeight / 2 - this.getHeight() / 2);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
@@ -27,20 +25,31 @@ public class MainFrame extends JFrame {
         this.dispatchEvent((new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
     }
 
-    public void launch() {
+//    public void launch() {
+//        //AuthorizationFrame authorizationFrame = new AuthorizationFrame();
+//        authorizationFrame.launch();
+//    }
+
+    public void authorize(User user){
+        session = new Session(user);
         if (session.isAuthorized()) {
             JPanel sessionPanel = new JPanel();
+
             sessionPanel.add(new JLabel(session.getCurrentUser().getUserName()));
+
             JButton logOutButton = new JButton("LogOut");
             logOutButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     session.logOut();
+                    setVisible(false);
+                    removeAll();
                     AuthorizationFrame authorizationFrame = new AuthorizationFrame();
                     authorizationFrame.launch();
                 }
             });
             sessionPanel.add(logOutButton);
+
             JButton deleteUser = new JButton("delete account");
             deleteUser.addActionListener(new ActionListener() {
                 @Override
@@ -53,43 +62,38 @@ public class MainFrame extends JFrame {
                 }
             });
             sessionPanel.add(deleteUser);
+
             JButton createNote = new JButton("Add note");
+
             createNote.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     addNoteFrame.launch(session);
-                    update();
                 }
             });
             sessionPanel.add(createNote);
+
             this.setLayout(new GridBagLayout());
             GridBagConstraints constraints = new GridBagConstraints();
-
-            //constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.gridx = 0;
             constraints.gridy = 0;
             this.add(sessionPanel, constraints);
-
-            constraints.gridx = 1;
+            constraints.gridy = 1;
             this.add(new UserNotesPanel(this, session), constraints);
             this.pack();
             this.setVisible(true);
         }
     }
 
-    public void update() {
+    public void updateNotes() {
         if (session.isAuthorized()) {
-            this.setVisible(false);
             this.getContentPane().remove(1);
-            this.add(new UserNotesPanel(this, session));
-            this.setVisible(true);
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridy=1;
+            constraints.gridx=0;
+            this.add(new UserNotesPanel(this, session),constraints);
+            this.pack();
         }
 
     }
-
-    /*public static void main(String[] args) {
-        MainFrame mainFrame = new MainFrame();
-        mainFrame.launch();
-
-    }*/
 }

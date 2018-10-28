@@ -8,13 +8,9 @@ public class NoteDTO {
     private int month;
     private int day;
     private int isJoint; //0=no, 1-yes
+    private int isDone;
 
-     NoteDTO(  int id, int userId,
-                    String content,
-                    int year,
-                    int month,
-                    int day,
-                    int isJoint) {
+    public NoteDTO(int id, int userId, String content, int year, int month, int day, int isJoint, int isDone) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -22,15 +18,7 @@ public class NoteDTO {
         this.month = month;
         this.day = day;
         this.isJoint = isJoint;
-    }
-     NoteDTO(int userId, String content, int year, int month, int say, int isJoint) {
-        this.id = -1; //tmp note
-        this.userId = userId;
-        this.content = content;
-        this.year = year;
-        this.month = month;
-        this.day = say;
-        this.isJoint = isJoint;
+        this.isDone = isDone;
     }
 
     public int getId() {

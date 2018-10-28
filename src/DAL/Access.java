@@ -40,7 +40,6 @@ public class Access {
             preparedStatement.setString(4, Integer.toString(month));
             preparedStatement.setString(5, Integer.toString(day));
             preparedStatement.executeUpdate();
-            System.out.println("Note added");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -58,9 +57,20 @@ public class Access {
                 insertStatement.setString(1, Integer.toString(noteId));
                 insertStatement.setString(2, Integer.toString(user));
                 insertStatement.executeUpdate();
-                System.out.println("Note: " + noteId + " User: " + user);
             }
-            System.out.println("Note added");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addUserToJointNote(int noteId, int userId) {
+        String sql = "INSERT INTO jointNotes(noteId, userId) VALUES(?,?)";
+        Connection connection = connect();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, Integer.toString(noteId));
+            preparedStatement.setString(2, Integer.toString(userId));
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -80,8 +90,35 @@ public class Access {
         return null;
     }
 
+    public int getUserId(String username) {
+        String sql = "SELECT id FROM users WHERE username = ? ";
+        try (Connection connection = this.connect();
+             PreparedStatement selectUser = connection.prepareStatement(sql)) {
+            selectUser.setString(1, username);
+            ResultSet rs = selectUser.executeQuery();
+            int ans = rs.getInt("id") ;
+            return ans;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public UserDTO getUser(int id) {
+        String sql = "SELECT username, password FROM users WHERE id = ?";
+        try (Connection connection = this.connect();
+             PreparedStatement selectUser = connection.prepareStatement(sql)) {
+            selectUser.setString(1, Integer.toString(id));
+            ResultSet rs = selectUser.executeQuery();
+            return new UserDTO(id, rs.getString("username"), rs.getString("password"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public NoteDTO getNote(int id) {
-        String sql = "SELECT userId, content, isJoint, year, month, day FROM notes WHERE  id = ?";
+        String sql = "SELECT userId, content, isJoint, year, month, day, isDone FROM notes WHERE  id = ?";
         try (Connection connection = connect();
              PreparedStatement selectNote = connection.prepareStatement(sql)) {
             selectNote.setString(1, Integer.toString(id));
@@ -92,12 +129,29 @@ public class Access {
                     rs.getInt("year"),
                     rs.getInt("month"),
                     rs.getInt("day"),
-                    rs.getInt("isJoint")
+                    rs.getInt("isJoint"),
+                    rs.getInt("isDone")
             );
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ArrayList<String> getAllUsernames() {
+        String sql = "select username from users";
+        Connection connection = connect();
+        ArrayList<String> names = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                names.add(rs.getString("username"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return names;
     }
 
     public ArrayList<Integer> getUsersOfJointNote(int noteId) {
@@ -119,7 +173,7 @@ public class Access {
 
     public ArrayList<NoteDTO> getAllUsersNotes(int userId) {
         ArrayList<NoteDTO> allNotes = new ArrayList<>();
-        String sql = "select id, content, year, month, day, isJoint from notes where userId = ?";
+        String sql = "select id, content, year, month, day, isJoint, isDone from notes where userId = ?";
         Connection connection = connect();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -132,7 +186,8 @@ public class Access {
                         rs.getInt("year"),
                         rs.getInt("month"),
                         rs.getInt("day"),
-                        rs.getInt("isJoint")));
+                        rs.getInt("isJoint"),
+                        rs.getInt("isDone")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -145,6 +200,13 @@ public class Access {
         String sql = "SELECT noteId FROM jointNotes WHERE  userId = ? AND isNoticed = 1";
         if (selectNotesFromJointNotes(userId, notes, sql)) return notes;
         return notes;
+    }
+
+    public ArrayList<Integer> getNotificationsOfUser(int userId) {
+        ArrayList<Integer> notifications = new ArrayList<>();
+        String sql = "SELECT noteId FROM jointNotes WHERE  userId = ? AND isNoticed = 0";
+        if (selectNotesFromJointNotes(userId, notifications, sql)) return notifications;
+        return notifications;
     }
 
     private boolean selectNotesFromJointNotes(int userId, ArrayList<Integer> notes, String sql) {
@@ -162,13 +224,6 @@ public class Access {
         return false;
     }
 
-    public ArrayList<Integer> getNotificationsOfUser(int userId) {
-        ArrayList<Integer> notifications = new ArrayList<>();
-        String sql = "SELECT noteId FROM jointNotes WHERE  userId = ? AND isNoticed = 0";
-        if (selectNotesFromJointNotes(userId, notifications, sql)) return notifications;
-        return notifications;
-    }
-
     public void deleteUser(int userId) throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
         Connection connection = connect();
@@ -176,6 +231,7 @@ public class Access {
         preparedStatement.setString(1, Integer.toString(userId));
         preparedStatement.executeUpdate();
     }
+
     public void deleteNote(int noteId) throws SQLException {
         String sql = "DELETE FROM notes WHERE id = ?";
         Connection connection = connect();

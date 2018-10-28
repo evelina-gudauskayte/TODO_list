@@ -1,7 +1,11 @@
-package BL;
+package BL.Managers;
 
+import BL.JointNote;
+import BL.Note;
+import BL.User;
 import DAL.Access;
 import DAL.NoteDTO;
+import DAL.UserDTO;
 
 import java.io.PrintStream;
 import java.sql.SQLException;
@@ -13,7 +17,7 @@ public class Session {
     private ArrayList<Note> allNotes = new ArrayList<>();
     Access access = new Access();
 
-    public Session(User user) { //обработку неправильных данных
+    public Session(User user) {
         this.currentUser = user;
         updateAllNotes();
     }
@@ -34,6 +38,10 @@ public class Session {
         }
     }
 
+    public String getUsernameById(int id){
+        return access.getUser(id).getName();
+    }
+
     public boolean isAuthorized() {
         if (this.currentUser != null) {
             return true;
@@ -44,6 +52,7 @@ public class Session {
     public void addNote(Note note) {
         access.addNote(currentUser.getId(), note.getContent(), note.getDate().getYear(), note.getDate().getMonth(), note.getDate().getDayOfMonth());
         allNotes.add(note);
+        System.out.println("Note added to base");
     }
 
     public boolean deleteUser() {
