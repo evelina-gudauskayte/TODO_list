@@ -1,17 +1,25 @@
 package DAL;
 
+import BL.User;
+
 public class UserDTO {
-    private int id;
+    private String id;
     private String name;
     private String password;
 
-    UserDTO(int id, String name, String password) { //pac private
+    public UserDTO(String id, String name, String password) { //pac private
         this.id = id;
         this.name = name;
         this.password = password;
     }
 
-    public int getId() {
+    public UserDTO(User user) { //pac private
+        this.id = user.getId();
+        this.name = user.getUserName();
+        this.password = user.getUserPassword();
+    }
+
+    public String getId() {
         return id;
     }
 

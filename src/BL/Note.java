@@ -2,6 +2,7 @@ package BL;
 
 import DAL.NoteDTO;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Note implements Comparable<Note> {
@@ -10,12 +11,11 @@ public class Note implements Comparable<Note> {
 
     private String content;
     private NoteDate date;
-    private int noteStatus = -1;
-    private int id = nextID.incrementAndGet();
+    private int noteStatus = 0;
+    private String id = String.valueOf(UUID.randomUUID());
     private boolean isPersonal = true;
-    //private User creator; //or we can hold an id of user
 
-    public Note(String content, User creator) {
+    public Note(String content) {
         this(new NoteDate(), content);
     }
 
@@ -32,23 +32,12 @@ public class Note implements Comparable<Note> {
     public Note(NoteDTO noteDTO) {
         this.id = noteDTO.getId();
         this.content = noteDTO.getContent();
-        //this.creator = creator;
         this.date = new NoteDate(noteDTO.getYear(),noteDTO.getMonth(), noteDTO.getDay());
     }
 
     @Override
     public int compareTo(Note note) {
-        //compare date and content
-      /*  if(this.date.compareTo(note.getDate())==0){
-            if(this.content.compareTo(note.getcontent())==0){
-                return 0;
-            }else{
-                return this.content.compareTo(note.getcontent());
-            }
-        }else{
-            return (this.date.compareTo(note.getDate()));
-        }*/
-        return Integer.compare(this.getId(), note.getId());
+        return this.getId().compareTo(note.getId());
     }
 
     @Override
@@ -75,10 +64,6 @@ public class Note implements Comparable<Note> {
         noteStatus = 1;
     }
 
-    public void markAsInProgress() {
-        noteStatus = 0;
-    }
-
     public void addContent(String content) {
         this.content = this.getContent() + "\n" + content;
     }
@@ -91,7 +76,7 @@ public class Note implements Comparable<Note> {
         return content;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

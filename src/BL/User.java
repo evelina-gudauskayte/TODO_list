@@ -2,16 +2,11 @@ package BL;
 
 import DAL.UserDTO;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Queue;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
 public class User {
-    private int id ;
+    private String id = String.valueOf(UUID.randomUUID()) ;
     private String userName;
     private String userPassword;
     private ArrayList<Integer> notifications = new ArrayList<>();
@@ -32,7 +27,6 @@ public class User {
     public User(String name, String password) {
         userName = name;
         this.userPassword = password;
-        this.id = -1;
     }
     public User(UserDTO userDTO){
         userName = userDTO.getName();
@@ -40,7 +34,7 @@ public class User {
         id = userDTO.getId();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
     public String getUserPassword() {
@@ -49,13 +43,4 @@ public class User {
     public String getUserName() {
         return userName;
     }
-
-    //сделать изменение пароля, логина.
-
-//    public static String hashPassword(String password) throws NoSuchAlgorithmException {
-//        MessageDigest md = MessageDigest.getInstance("SHA-256");
-//        md.update(password.getBytes(StandardCharsets.UTF_8));
-//        byte[] digest = md.digest();
-//        return String.format("%064x", new BigInteger(1, digest));
-//    }
 }

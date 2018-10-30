@@ -19,13 +19,11 @@ public class LogInManager {
         }
         md.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();
-        Access access = new Access();
         try {
-            access.addUser(username, String.format("%064x", new BigInteger(1, digest)));
+            Access.addUser(new UserDTO(new User(username, String.format("%064x", new BigInteger(1, digest)))));
             System.out.println("User added");
             return true;
         } catch (SQLException e) {
-            //e.printStackTrace();
             System.out.println("User not added");
             return false;
         }
@@ -41,7 +39,7 @@ public class LogInManager {
         md.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();
         Access access = new Access();
-        UserDTO userDTO = access.getUser(username, String.format("%064x", new BigInteger(1, digest)));
+        UserDTO userDTO = Access.getUser(username, String.format("%064x", new BigInteger(1, digest)));
         if (userDTO == null) {
             return null;
         }

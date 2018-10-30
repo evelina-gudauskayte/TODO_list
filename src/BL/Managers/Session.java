@@ -5,9 +5,7 @@ import BL.Note;
 import BL.User;
 import DAL.Access;
 import DAL.NoteDTO;
-import DAL.UserDTO;
 
-import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +13,6 @@ import java.util.Iterator;
 public class Session {
     private User currentUser;
     private ArrayList<Note> allNotes = new ArrayList<>();
-    Access access = new Access();
 
     public Session(User user) {
         this.currentUser = user;
@@ -26,20 +23,19 @@ public class Session {
         return allNotes;
     }
 
-    private void updateAllNotes(){
-        Access access = new Access();
-        ArrayList<NoteDTO> noteDTOArrayList = access.getAllUsersNotes(currentUser.getId());
-        for(NoteDTO noteDTO: noteDTOArrayList){
-            if(noteDTO.getIsJoint()==0){
-            allNotes.add(new Note(noteDTO));
-            }else{
-                allNotes.add(new JointNote(noteDTO, access.getUsersOfJointNote(noteDTO.getId())));
+    private void updateAllNotes() {
+        ArrayList<NoteDTO> noteDTOArrayList = Access.getAllUsersNotes(currentUser.getId());
+        for (NoteDTO noteDTO : noteDTOArrayList) {
+            if (noteDTO.getIsJoint() == 0) {
+                allNotes.add(new Note(noteDTO));
+            } else {
+                allNotes.add(new JointNote(noteDTO, Access.getUsersIdsOfJointNote(noteDTO.getId())));
             }
         }
     }
 
-    public String getUsernameById(int id){
-        return access.getUser(id).getName();
+    public String getUsernameById(String id) {
+        return Access.getUser(id).getName();
     }
 
     public boolean isAuthorized() {
@@ -50,14 +46,20 @@ public class Session {
     }
 
     public void addNote(Note note) {
-        access.addNote(currentUser.getId(), note.getContent(), note.getDate().getYear(), note.getDate().getMonth(), note.getDate().getDayOfMonth());
+        Access.addNote(new NoteDTO(note, currentUser.getId()));
+        allNotes.add(note);
+        System.out.println("Note added to base");
+    }
+
+    public void addJointNote(JointNote note) {
+        Access.addJointNote(new NoteDTO((Note)note, currentUser.getId()), note.getUsers());
         allNotes.add(note);
         System.out.println("Note added to base");
     }
 
     public boolean deleteUser() {
         try {
-            access.deleteUser(currentUser.getId());
+            Access.deleteUser(currentUser.getId());
             currentUser = null;
             return true;
         } catch (SQLException e) {
@@ -66,7 +68,7 @@ public class Session {
         }
     }
 
-    public void logOut(){
+    public void logOut() {
         currentUser = null;
     }
 
@@ -74,20 +76,32 @@ public class Session {
         return currentUser;
     }
 
-    public void deleteNote(int noteId){
+    public void deleteNote(String noteId) {
         try {
-            access.deleteNote(noteId);
+            Access.deleteNote(noteId);
             Iterator<Note> iterator = allNotes.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 Note n = iterator.next();
-                if(n.getId()==noteId){
+                if (n.getId().equals(noteId)) {
                     iterator.remove();
+                    System.out.println("Note deleted");
                     break;
                 }
             }
-            System.out.println("Note deleted");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String args[]) {
+        //LogInManager.addNewUser("Bob", "password");
+        //LogInManager.addNewUser("Alice", "password");
+        User Bob = LogInManager.authorizeUser("Bob", "password");
+        Session session = new Session(Bob);
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add("463fa061-5d91-4669-96f6-7c1847eb3768");
+        ids.add("8448b7a4-67fe-45a1-bdd0-4de00ef6d234");
+        session.addJointNote(new JointNote("Joint note for Alice and Masha", ids));
     }
 }

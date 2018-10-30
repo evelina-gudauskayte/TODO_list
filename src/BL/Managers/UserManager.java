@@ -3,8 +3,6 @@ package BL.Managers;
 import BL.User;
 import DAL.Access;
 
-import java.util.ArrayList;
-
 public class UserManager {
     User user;
 
@@ -24,7 +22,7 @@ public class UserManager {
         Access access = new Access();
         return access.getUserId(username);
     }
-    public ArrayList<String> getAllUsernames(){
+    /*public ArrayList<String> getAllUsernames(){
         return new Access().getAllUsernames();
-    }
+    }*/
 }

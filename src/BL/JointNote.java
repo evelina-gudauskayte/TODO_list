@@ -1,25 +1,28 @@
 package BL;
 
 import DAL.NoteDTO;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 
 public class JointNote extends Note {
-    private ArrayList<Integer> users = new ArrayList<>();
-    public  JointNote (NoteDate date, String content, ArrayList<Integer> users){
+    private ArrayList<String> usersIds = new ArrayList<>();
+    public  JointNote (NoteDate date, String content, ArrayList<String> usersIds){
         super(date,content);
-        this.users = users;
+        this.usersIds = usersIds;
     }
-    public JointNote(NoteDTO noteDTO, ArrayList<Integer> users ){
+    public JointNote(String content, ArrayList<String> usersIds){
+        super(content);
+        this.usersIds = usersIds;
+    }
+    public JointNote(NoteDTO noteDTO, ArrayList<String> usersIds ){
         super(noteDTO);
-        this.users=users;
+        this.usersIds=usersIds;
     }
 
-    public ArrayList<Integer> getUsers() {
-        return users;
+    public ArrayList<String> getUsers() {
+        return usersIds;
     }
-    public void addUserId(int userId) {
-        users.add(userId);
+    public void addUserId(String userId) {
+        usersIds.add(userId);
     }
 }

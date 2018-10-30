@@ -1,16 +1,18 @@
 package DAL;
 
+import BL.Note;
+
 public class NoteDTO {
-    private int id;
-    private int userId;
+    private String id;
+    private String userId;
     private String content;
     private int year;
     private int month;
     private int day;
-    private int isJoint; //0=no, 1-yes
-    private int isDone;
+    private int isJoint = 0; //0=no, 1-yes
+    private int isDone = 0;
 
-    public NoteDTO(int id, int userId, String content, int year, int month, int day, int isJoint, int isDone) {
+    public NoteDTO(String id, String userId, String content, int year, int month, int day, int isJoint, int isDone) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -21,11 +23,21 @@ public class NoteDTO {
         this.isDone = isDone;
     }
 
-    public int getId() {
+    public NoteDTO(Note note, String userId){
+        id = note.getId();
+        content = note.getContent();
+        year = note.getDate().getYear();
+        month = note.getDate().getMonth();
+        day = note.getDate().getDayOfMonth();
+        this.userId = userId;
+
+    }
+
+    public String getId() {
         return id;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
@@ -47,5 +59,9 @@ public class NoteDTO {
 
     public int getIsJoint() {
         return isJoint;
+    }
+
+    public int getIsDone() {
+        return isDone;
     }
 }
