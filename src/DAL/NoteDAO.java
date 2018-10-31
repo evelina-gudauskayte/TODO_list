@@ -9,24 +9,36 @@ import java.util.function.Predicate;
 
 public class NoteDAO implements DAO<NoteDTO> {
 
-    private static Connection connection = Access.connect();
+    private static Connection connection = Access.getConnection();
 
     public void addJointNote(NoteDTO noteDTO, ArrayList<String> usersIds) throws SQLException {
-        connection.setAutoCommit(false);
         this.add(noteDTO);
+        connection.setAutoCommit(false);
         String sql = "INSERT INTO jointNotes(noteId, userId) VALUES(?,?)";
         String update = "update notes set isJoint = 1 where id = ?";
         PreparedStatement updateStatement = connection.prepareStatement(update);
         updateStatement.setString(1, noteDTO.getId());
         updateStatement.executeUpdate();
+        connection.commit();
         PreparedStatement insertStatement = connection.prepareStatement(sql);
         for (String userId : usersIds) {
             insertStatement.setString(1, noteDTO.getId());
             insertStatement.setString(2, userId);
             insertStatement.executeUpdate();
         }
-        connection.commit();
         connection.setAutoCommit(true);
+    }
+
+    public ArrayList<String> getIdsOfUsersOfJointNote(NoteDTO noteDTO) throws SQLException {
+        String sql = "SELECT userId FROM jointNotes WHERE  noteId = ?";
+        ArrayList<String> usersIds = new ArrayList<>();
+        PreparedStatement selectUsers = connection.prepareStatement(sql);
+        selectUsers.setString(1, noteDTO.getId());
+        ResultSet rs = selectUsers.executeQuery();
+        while (rs.next()) {
+            usersIds.add(rs.getString("userId"));
+        }
+        return usersIds;
     }
 
     @Override
@@ -61,14 +73,40 @@ public class NoteDAO implements DAO<NoteDTO> {
     }
 
     @Override
-    public void update(NoteDTO noteDTO, NoteDTO newNoteDTO) {
-    } //???
+    public void update(NoteDTO noteDTO, NoteDTO newNoteDTO) throws SQLException {
+        String sql = "UPDATE notes SET content = ?, year = ?, month = ?, day = ?, isJoint = ?, isDone = ? WHERE id = ?";
+        PreparedStatement update = connection.prepareStatement(sql);
+        connection.setAutoCommit(false);
+        update.setString(1, newNoteDTO.getContent());
+        update.setString(2, String.valueOf(newNoteDTO.getYear()));
+        update.setString(3, String.valueOf(newNoteDTO.getMonth()));
+        update.setString(4, String.valueOf(newNoteDTO.getDay()));
+        if(newNoteDTO.IsJoint()){
+            update.setString(5,"1");
+        }else {
+            update.setString(5,"0");
+        }
+        if(newNoteDTO.IsDone()){
+            update.setString(6,"1");
+        }else {
+            update.setString(6,"0");
+        }
+        update.setString(7, noteDTO.getId());
+        update.executeUpdate();
+        connection.commit();
+        connection.setAutoCommit(true);
+    }
 
     @Override
     public void delete(NoteDTO noteDTO) throws SQLException {
         String sql = "DELETE FROM notes WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
+        preparedStatement.setString(1, noteDTO.getId());
+        preparedStatement.executeUpdate();
+        connection.commit();
+        sql = "DELETE FROM jointNotes WHERE noteId = ?";
+        PreparedStatement deepDelete = connection.prepareStatement(sql);
         preparedStatement.setString(1, noteDTO.getId());
         preparedStatement.executeUpdate();
         connection.commit();
@@ -103,6 +141,16 @@ public class NoteDAO implements DAO<NoteDTO> {
         ArrayList<NoteDTO> some = new ArrayList<>();
         for (NoteDTO noteDTO : this.getAll()) {
             if (predicate.test(noteDTO)) {
+                some.add(noteDTO);
+            }
+        }
+        return some;
+    }
+
+    public ArrayList<NoteDTO> getNotesOfUser(UserDTO user) throws SQLException {
+        ArrayList<NoteDTO> some = new ArrayList<>();
+        for (NoteDTO noteDTO : this.getAll()) {
+            if (noteDTO.getUserId() == user.getId()){
                 some.add(noteDTO);
             }
         }

@@ -8,7 +8,17 @@ public class Access {
 
     private static final String pathToData = "jdbc:sqlite:" + System.getProperty("user.dir") + "/src/Data/todolistData.db";
 
-    public static Connection connect() {
+    private static Connection connection;
+
+    public Access(){
+        connection = connect();
+    }
+
+    public static Connection getConnection() {
+        return connection;
+    }
+
+    private static Connection connect() {
         Connection conn = null;
         String url = pathToData;
         try {

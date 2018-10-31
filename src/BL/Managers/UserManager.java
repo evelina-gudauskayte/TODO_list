@@ -8,12 +8,6 @@ import Util.HashGenerator;
 import java.sql.SQLException;
 
 public class UserManager {
-    User user;
-
-    public UserManager(User user) {
-        this.user = user;
-    }
-
     public void updateUserPassword(String password) {
 
     }
@@ -22,7 +16,7 @@ public class UserManager {
 
     }
 
-    public void deleleteUser() { //нужно если не каскадное удаление, а я не помню какое у нас там
+    public void deleleteUser(User user) { //нужно если не каскадное удаление, а я не помню какое у нас там
         UserDAO userDAO = new UserDAO();
         try {
             userDAO.delete(new UserDTO(user));

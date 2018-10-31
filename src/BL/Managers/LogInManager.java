@@ -13,11 +13,13 @@ public class LogInManager {
         UserDAO userDAO = new UserDAO();
         UserDTO userDTO = null;
         try {
+            System.out.println(username+HashGenerator.hashPassword(password));
             userDTO = userDAO.get(username, HashGenerator.hashPassword(password));
             return new User(userDTO);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        throw new NullPointerException();
+        System.out.println("Wrong something");
+        return null;
     }
 }

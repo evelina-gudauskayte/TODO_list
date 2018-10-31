@@ -1,6 +1,9 @@
 package DAL;
 
+import BL.JointNote;
 import BL.Note;
+
+import java.util.function.Predicate;
 
 public class NoteDTO {
     private String id;
@@ -23,14 +26,23 @@ public class NoteDTO {
         this.isDone = isDone;
     }
 
-    public NoteDTO(Note note, String userId){
+    public NoteDTO(Note note, String userId) {
         id = note.getId();
         content = note.getContent();
         year = note.getDate().getYear();
         month = note.getDate().getMonth();
         day = note.getDate().getDayOfMonth();
         this.userId = userId;
+    }
 
+    public NoteDTO(JointNote note, String userId) {
+        id = note.getId();
+        content = note.getContent();
+        year = note.getDate().getYear();
+        month = note.getDate().getMonth();
+        day = note.getDate().getDayOfMonth();
+        this.isJoint = 1;
+        this.userId = userId;
     }
 
     public String getId() {
@@ -57,11 +69,26 @@ public class NoteDTO {
         return day;
     }
 
-    public int getIsJoint() {
-        return isJoint;
+    public boolean IsJoint() {
+        if (this.isJoint == 0) {
+            return false;
+        }
+        return true;
     }
 
-    public int getIsDone() {
-        return isDone;
+    public boolean IsDone() {
+        if (this.isDone == 0) {
+            return false;
+        }
+        return true;
+    }
+
+
+    private static Predicate<NoteDTO> JointNotesPredicate() {
+        return NoteDTO::IsJoint;
+    }
+
+    private static Predicate<NoteDTO> DoneNotesPredicate() {
+        return NoteDTO::IsDone;
     }
 }

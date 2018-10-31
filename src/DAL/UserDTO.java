@@ -13,7 +13,7 @@ public class UserDTO {
         this.password = password;
     }
 
-    public UserDTO(User user) { //pac private
+    public UserDTO(User user) { //сделать это в BL
         this.id = user.getId();
         this.name = user.getUserName();
         this.password = user.getUserPassword();

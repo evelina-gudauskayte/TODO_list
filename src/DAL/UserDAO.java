@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 public class UserDAO implements DAO<UserDTO> {
 
-    private static Connection connection = Access.connect();
+    private static Connection connection = Access.getConnection();
 
     public UserDTO get(String username, String password) throws SQLException {
         String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
@@ -18,13 +18,11 @@ public class UserDAO implements DAO<UserDTO> {
         selectUser.setString(1, username);
         selectUser.setString(2, password);
         ResultSet rs = selectUser.executeQuery();
+        connection.commit();
         if (rs.next()) {
-            connection.commit();
-            rs.close();
             connection.setAutoCommit(true);
             return new UserDTO(rs.getString("id"), rs.getString("username"), rs.getString("password"));
         }
-        connection.commit();
         rs.close();
         connection.setAutoCommit(true);
         return null;
@@ -83,6 +81,7 @@ public class UserDAO implements DAO<UserDTO> {
 
     @Override
     public void update(UserDTO userDTO,UserDTO newUserDTO) {
+        String sql = "";
 
     }
 
