@@ -3,7 +3,7 @@ package BL.Managers;
 import BL.JointNote;
 import BL.Note;
 import BL.User;
-import DAL.Access;
+import DAL.oldDAO;
 import DAL.NoteDTO;
 
 import java.sql.SQLException;
@@ -14,8 +14,8 @@ public class Session {
     private User currentUser;
     private ArrayList<Note> allNotes = new ArrayList<>();
 
-    public Session(User user) {
-        this.currentUser = user;
+    public Session(String username, String password) {
+        this.currentUser = LogInManager.authorizeUser(username,password);
         updateAllNotes();
     }
 
@@ -24,18 +24,18 @@ public class Session {
     }
 
     private void updateAllNotes() {
-        ArrayList<NoteDTO> noteDTOArrayList = Access.getAllUsersNotes(currentUser.getId());
+        ArrayList<NoteDTO> noteDTOArrayList = oldDAO.getAllUsersNotes(currentUser.getId());
         for (NoteDTO noteDTO : noteDTOArrayList) {
             if (noteDTO.getIsJoint() == 0) {
                 allNotes.add(new Note(noteDTO));
             } else {
-                allNotes.add(new JointNote(noteDTO, Access.getUsersIdsOfJointNote(noteDTO.getId())));
+                allNotes.add(new JointNote(noteDTO, oldDAO.getUsersIdsOfJointNote(noteDTO.getId())));
             }
         }
     }
 
     public String getUsernameById(String id) {
-        return Access.getUser(id).getName();
+        return oldDAO.getUser(id).getName();
     }
 
     public boolean isAuthorized() {
@@ -46,20 +46,20 @@ public class Session {
     }
 
     public void addNote(Note note) {
-        Access.addNote(new NoteDTO(note, currentUser.getId()));
+        oldDAO.addNote(new NoteDTO(note, currentUser.getId()));
         allNotes.add(note);
         System.out.println("Note added to base");
     }
 
     public void addJointNote(JointNote note) {
-        Access.addJointNote(new NoteDTO((Note)note, currentUser.getId()), note.getUsers());
+        oldDAO.addJointNote(new NoteDTO((Note)note, currentUser.getId()), note.getUsers());
         allNotes.add(note);
         System.out.println("Note added to base");
     }
 
     public boolean deleteUser() {
         try {
-            Access.deleteUser(currentUser.getId());
+            oldDAO.deleteUser(currentUser.getId());
             currentUser = null;
             return true;
         } catch (SQLException e) {
@@ -78,7 +78,7 @@ public class Session {
 
     public void deleteNote(String noteId) {
         try {
-            Access.deleteNote(noteId);
+            oldDAO.deleteNote(noteId);
             Iterator<Note> iterator = allNotes.iterator();
             while (iterator.hasNext()) {
                 Note n = iterator.next();

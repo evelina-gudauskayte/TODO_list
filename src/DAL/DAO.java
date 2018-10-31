@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 public interface DAO<T> {
     void add(T object) throws SQLException;
 
-    void update(T object, String... args) throws SQLException;
+    void update(T object, T newObject) throws SQLException;
 
     void delete(T object) throws SQLException;
 
