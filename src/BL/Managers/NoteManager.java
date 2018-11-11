@@ -4,19 +4,18 @@ import BL.JointNote;
 import BL.Note;
 import BL.NoteDate;
 import BL.User;
-import DAL.DAO;
 import DAL.NoteDAO;
 import DAL.NoteDTO;
-import DAL.UserDTO;
+import Util.Logger;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class NoteManager {
-    private final DAO<NoteDTO> noteDAO;
+    private final NoteDAO<NoteDTO> noteDAO;
 
-    public NoteManager(DAO<NoteDTO> dao){
-        noteDAO = dao;
+    public NoteManager(NoteDAO<NoteDTO> noteDAO) {
+        this.noteDAO = noteDAO;
     }
 
     public void update(Note note, String newContent) {
@@ -31,42 +30,20 @@ public class NoteManager {
     }
 
     public void add(Note note, User user) {
-        NoteDAO noteDAO = new NoteDAO();
-        try {
-            noteDAO.add(new NoteDTO(note, user.getId()));
-            System.out.println("Added");
-        } catch (SQLException e) {
-            System.out.println("NOT added");
-            e.printStackTrace();
-        }
-
+        Logger.getInstance().log(() -> noteDAO.add(note.getNoteDTO(user.getId())), "Note added");
+        System.out.println("Added");
     }
 
     public void addJointNote(JointNote note, User user, ArrayList<String> ids) {
-        NoteDAO noteDAO = new NoteDAO(); ///сделать приватно
-        try {
-            noteDAO.addJointNote(new NoteDTO(note, user.getId()), ids);
-            System.out.println("Added"); //logging
-        } catch (SQLException e) {
-            System.out.println("NOT added");
-            e.printStackTrace();
-        }
-
+        Logger.getInstance().log(() -> noteDAO.addJointNote(note.getNoteDTO(user.getId()), ids), "Joint note added");
     }
 
     public void deleteNote(Note note, User user) {
-        NoteDAO noteDAO = new NoteDAO();
-        try {
-            noteDAO.delete(new NoteDTO(note, user.getId()));
-            System.out.println("Note is deleted.");
-        } catch (SQLException e) {
-            System.out.println("NOT deleted.");
-            e.printStackTrace();
-        }
+        Logger.getInstance().log(() -> noteDAO.delete(note.getNoteDTO(user.getId())), "Note is deleted");
+        System.out.println("Note is deleted.");
     }
 
-    public static ArrayList<Note> getAllNotes() {
-        NoteDAO noteDAO = new NoteDAO();
+    public ArrayList<Note> getAllNotes() {
         ArrayList<Note> notes = new ArrayList<>();
         try {
             for (NoteDTO noteDTO : noteDAO.getAll()) {
@@ -82,11 +59,10 @@ public class NoteManager {
         return notes;
     }
 
-    public ArrayList<Note> getAllNotesofUser(User user) {
-        NoteDAO noteDAO = new NoteDAO();
+    public ArrayList<Note> getAllNotesOfUser(User user) {
         ArrayList<Note> notes = new ArrayList<>();
         try {
-            for (NoteDTO noteDTO : noteDAO.getNotesOfUser(new UserDTO(user))) {
+            for (NoteDTO noteDTO : noteDAO.getNotesOfUser(user.getId())) {
                 if (!noteDTO.IsJoint()) {
                     notes.add(new Note(noteDTO));
                 } else {

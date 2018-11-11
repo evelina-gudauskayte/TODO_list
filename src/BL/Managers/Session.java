@@ -4,13 +4,13 @@ import BL.JointNote;
 import BL.Note;
 import BL.User;
 import DAL.Access;
-import DAL.NoteDAO;
+import DAL.RealNoteDAO;
 
 import java.util.ArrayList;
 
 public class Session {
     private User currentUser;
-    private NoteManager noteManager = new NoteManager(new NoteDAO());
+    private NoteManager noteManager = new NoteManager(new RealNoteDAO());
     private UserManager userManager = new UserManager();
     private ArrayList<Note> allNotes = new ArrayList<>();
 

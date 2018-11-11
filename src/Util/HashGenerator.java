@@ -16,6 +16,5 @@ public class HashGenerator {
         md.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();
         return String.format("%064x", new BigInteger(1, digest));
-
     }
 }

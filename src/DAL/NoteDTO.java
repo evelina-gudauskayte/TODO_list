@@ -26,25 +26,6 @@ public class NoteDTO {
         this.isDone = isDone;
     }
 
-    public NoteDTO(Note note, String userId) {
-        id = note.getId();
-        content = note.getContent();
-        year = note.getDate().getYear();
-        month = note.getDate().getMonth();
-        day = note.getDate().getDayOfMonth();
-        this.userId = userId;
-    }
-
-    public NoteDTO(JointNote note, String userId) {
-        id = note.getId();
-        content = note.getContent();
-        year = note.getDate().getYear();
-        month = note.getDate().getMonth();
-        day = note.getDate().getDayOfMonth();
-        this.isJoint = 1;
-        this.userId = userId;
-    }
-
     public String getId() {
         return id;
     }

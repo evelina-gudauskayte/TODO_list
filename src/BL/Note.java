@@ -11,7 +11,7 @@ public class Note implements Comparable<Note> {
 
     private String content;
     private NoteDate date;
-    private int noteStatus = 0;
+    private boolean isDone = false;
     private String id = String.valueOf(UUID.randomUUID());
     private boolean isPersonal = true;
 
@@ -43,12 +43,10 @@ public class Note implements Comparable<Note> {
     @Override
     public String toString() {
         String status;
-        if (noteStatus > 0) {
+        if (isDone) {
             status = "done";
-        } else if (noteStatus < 0) {
-            status = "not started";
-        } else {
-            status = "in the process";
+        } else{
+            status = "not done";
         }
         return ("Deadline at: "
                 + date
@@ -61,8 +59,10 @@ public class Note implements Comparable<Note> {
     }
 
     public void markAsDone() {
-        noteStatus = 1;
+        isDone = true;
     }
+
+    public void markAsUndone(){isDone = false;}
 
     public void addContent(String content) {
         this.content = this.getContent() + "\n" + content;
@@ -84,9 +84,10 @@ public class Note implements Comparable<Note> {
         return date;
     }
 
-   /* public User getCreator() {
-        return creator;
-    }*/
+    public NoteDTO getNoteDTO(String userId) {
+        int done = this.isDone ? 1 : 0;
+        return new NoteDTO(this.id, userId,this.content, this.getDate().getYear(),this.getDate().getMonth(),this.getDate().getDayOfMonth(),0,done );
+    }
 
     public boolean isPersonal() {
         return isPersonal;

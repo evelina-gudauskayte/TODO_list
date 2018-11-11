@@ -1,7 +1,7 @@
 package BL.Managers;
 
 import BL.User;
-import DAL.UserDAO;
+import DAL.RealUserDAO;
 import DAL.UserDTO;
 import Util.HashGenerator;
 
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class LogInManager {
 
     public static User authorizeUser(String username, String password) throws NullPointerException {
-        UserDAO userDAO = new UserDAO();
+        RealUserDAO userDAO = new RealUserDAO();
         UserDTO userDTO = null;
         try {
             System.out.println(username+HashGenerator.hashPassword(password));
