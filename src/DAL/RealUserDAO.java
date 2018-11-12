@@ -70,7 +70,7 @@ public class RealUserDAO implements UserDAO<UserDTO> {
         preparedStatement.setString(1,userDTO.getId());
         preparedStatement.executeUpdate();
         connection.commit();
-        sql = "DELETE from jointNotes where userId = ? ";
+        sql = "DELETE from jointNotes where userId = ? "; //add deleting from joint notes users's notes
         preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1,userDTO.getId());
         preparedStatement.executeUpdate();
@@ -92,9 +92,7 @@ public class RealUserDAO implements UserDAO<UserDTO> {
     }
 
     @Override
-    public void update(UserDTO userDTO,UserDTO newUserDTO) {
-        String sql = "";
-
+    public void update(UserDTO userDTO,UserDTO newUserDTO) {//TODO сделать
     }
 
     @Override

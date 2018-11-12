@@ -1,17 +1,17 @@
 package BL.Managers;
 
 import BL.User;
-import DAL.RealUserDAO;
 import DAL.UserDAO;
 import DAL.UserDTO;
-import Util.HashGenerator;
 
 import java.sql.SQLException;
 
 public class UserManager {
     private final UserDAO<UserDTO> userDAO;
+    private User user;
 
-    public UserManager(UserDAO<UserDTO> userDAO){
+    public UserManager(UserDAO<UserDTO> userDAO, User user){
+        this.user = user;
         this.userDAO = userDAO;
     }
     public void updateUserPassword(String password) {
@@ -22,7 +22,7 @@ public class UserManager {
 
     }
 
-    public void deleleteUser(User user) { //нужно если не каскадное удаление, а я не помню какое у нас там
+    public void deleleteUser() { //TODO нужно если не каскадное удаление, а я не помню какое у нас там
         try {
             userDAO.delete(user.getUserDTO());
             System.out.println(user.getUserName() + " is deleted.");
@@ -45,16 +45,4 @@ public class UserManager {
         }
         return names;
     }*/
-
-    public boolean addNewUser(String username, String password) {
-        try {
-            userDAO.add((new User(username, HashGenerator.hashPassword(password))).getUserDTO());
-            System.out.println("User added");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Not added");
-        }
-
-        return true;
-    }
 }

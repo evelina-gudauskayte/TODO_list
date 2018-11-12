@@ -5,7 +5,7 @@ import DAL.UserDTO;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class User {
+public class User implements Cloneable{
     private String id = String.valueOf(UUID.randomUUID());
     private String userName;
     private String userPassword;
@@ -24,6 +24,15 @@ public class User {
     @Override
     public String toString() {
         return this.getUserName();
+    }
+
+    public User clone(){
+        try {
+            return (User)super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw  new InternalError();
+        }
     }
 
     public User(String name, String password) {
