@@ -11,13 +11,16 @@ public class LogInManager {
     public static User authorizeUser(String username, String password) throws NullPointerException {
         RealUserDAO userDAO = new RealUserDAO();
         System.out.println(username + HashGenerator.hashPassword(password));
-        UserDTO userDTO = Logger.getInstance().logWithReturn(() -> userDAO.get(username, HashGenerator.hashPassword(password)), "Authorized");
+        UserDTO userDTO = Logger.getInstance().logWithReturn(() -> userDAO.get(username, HashGenerator.hashPassword(password)), "Authorization");
 //        UserDTO userDTO = null;
 //        try {
 //            userDTO = userDAO.get(username, HashGenerator.hashPassword(password));
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
+        if (userDTO == null){
+            return null;
+        }
         return new User(userDTO);
     }
 

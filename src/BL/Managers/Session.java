@@ -14,13 +14,15 @@ public class Session {
     private UserManager userManager;
     private ArrayList<Note> allNotes = new ArrayList<>();
 
-    public Session(String username, String password) {
+    public Session(String username, String password){
+        Access access = new Access();
         this.currentUser = LogInManager.authorizeUser(username, password);
         if(isAuthorized()){
             noteManager = new NoteManager(new RealNoteDAO(), currentUser);
             userManager = new UserManager(new RealUserDAO(), currentUser);
+            updateAllNotes();
         }
-        updateAllNotes();
+
     }
 
     public NoteManager getNoteManager() {
