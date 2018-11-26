@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -34,7 +35,8 @@ public class AuthorizationController {
         Session session = new Session(usernameField.getText(), passwordField.getText());
         if(session.isAuthorized()){ // TODO create new stage with notes
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(FXMLLoader.load(getClass().getResource("frame.fxml")));
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("frame.fxml")));
+            stage.setScene(scene);
             /*Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Congrads!");
             alert.setContentText("You did it wow!");
