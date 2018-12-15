@@ -7,7 +7,6 @@ import java.sql.SQLException;
 public class Access {
 
     private static final String pathToData = "jdbc:sqlite:" + System.getProperty("user.dir") + "/src/Data/todolistData.db";
-
     private static Connection connection;
 
     public Access(){
@@ -28,9 +27,5 @@ public class Access {
             e.printStackTrace();
         }
         return conn;
-    }
-
-    public static void main(String argd[]){
-        Connection connection = Access.connect();
     }
 }

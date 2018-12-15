@@ -58,6 +58,10 @@ public class User implements Cloneable{
         return userPassword;
     }
 
+    public void updatedUserPassword(String newUserPassword){
+        this.userPassword=newUserPassword;
+    }
+
     public String getUserName() {
         return userName;
     }

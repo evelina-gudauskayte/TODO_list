@@ -1,14 +1,23 @@
 package GUI;
 
-public class App {
-    public static void main(String[] args){
-      // Access access = new Access();
-        //LogInManager.addNewUser("Alice","password");
-        //Session alice = new Session("Alice","password");
-     /*   alice.getNoteManager().add(new Note("ecology"));
-        Note note = new Note("unchanged");
-        alice.getNoteManager().add(note);
-        alice.getNoteManager().update(note,"changed");*/
+import BL.JointNote;
+import BL.Note;
+import DAL.Access;
+import DAL.RealNoteDAO;
+import DAL.RealUserDAO;
+import BL.Managers.*;
+import Util.BadContextExeption;
 
+import java.util.ArrayList;
+
+public class App {
+    public static void main(String[] args) throws BadContextExeption {
+      //LogInManager.addNewUser("Alice","password");
+       Access access = new Access();
+       UserManager userManager = new UserManagerImplementation(new RealUserDAO());
+       userManager.authorizeUser("Alice","password");
+       NoteManager noteManager = new NoteManagerImplementation(new RealNoteDAO());
+       Note note = new Note("Another stupid Alice's note ");
+       noteManager.add(note);
     }
 }
