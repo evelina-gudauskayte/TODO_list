@@ -6,18 +6,17 @@ import BL.NoteDate;
 import BL.User;
 import DAL.NoteDAO;
 import DAL.NoteDTO;
-import Util.BadContextExeption;
+import Util.BadContextException;
 import Util.Logger;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class NoteManagerImplementation implements NoteManager{
+public class NoteManagerImplementation implements NoteManager {
     private final NoteDAO<NoteDTO> noteDAO;
     User user = Context.getInstance().getCurrentUser();
 
-    public NoteManagerImplementation(NoteDAO<NoteDTO> noteDAO) throws BadContextExeption {
-        if(user==null) throw new BadContextExeption();
+    public NoteManagerImplementation(NoteDAO<NoteDTO> noteDAO) throws BadContextException {
+        if (user == null) throw new BadContextException();
         this.noteDAO = noteDAO;
     }
 
@@ -39,9 +38,9 @@ public class NoteManagerImplementation implements NoteManager{
     }
 
     public void add(Note note) {
-        if(note instanceof JointNote){
+        if (note instanceof JointNote) {
             addJointNote((JointNote) note);
-        }else {
+        } else {
             Logger.getInstance().log(() -> noteDAO.add(note.getNoteDTO(user.getId())), "Note added");
         }
     }
@@ -55,39 +54,30 @@ public class NoteManagerImplementation implements NoteManager{
         System.out.println("Note is deleted.");
     }
 
-    @Override
     public Note getNote(String noteId) {
-        return null;
+        NoteDTO note = Logger.getInstance().logWithReturn(() -> noteDAO.get(noteId), "Get note operation");
+        return new Note(note);
     }
 
     public ArrayList<Note> getAllNotes() {
-        ArrayList<Note> notes = new ArrayList<>();
-        try {
-            for (NoteDTO noteDTO : noteDAO.getAll()) {
-                if (!noteDTO.IsJoint()) {
-                    notes.add(new Note(noteDTO));
-                } else {
-                    notes.add(new JointNote(noteDTO, noteDAO.getIdsOfUsersOfJointNote(noteDTO)));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return notes;
+        ArrayList<NoteDTO> noteDTOS = Logger.getInstance().logWithReturn(noteDAO::getAll, "Get all notes");
+        return createNotesFromNotesDTO(noteDTOS);
     }
 
     public ArrayList<Note> getAllNotesOfUser() {
+        ArrayList<NoteDTO> noteDTOS = Logger.getInstance().logWithReturn(() -> noteDAO.getNotesOfUser(user.getId()), "Get all users notes");
+        return createNotesFromNotesDTO(noteDTOS);
+    }
+
+    private ArrayList<Note> createNotesFromNotesDTO(ArrayList<NoteDTO> noteDTOS) {
         ArrayList<Note> notes = new ArrayList<>();
-        try {
-            for (NoteDTO noteDTO : noteDAO.getNotesOfUser(user.getId())) {
-                if (!noteDTO.IsJoint()) {
-                    notes.add(new Note(noteDTO));
-                } else {
-                    notes.add(new JointNote(noteDTO, noteDAO.getIdsOfUsersOfJointNote(noteDTO)));
-                }
+        for (NoteDTO noteDTO : noteDTOS) {
+            if (!noteDTO.IsJoint()) {
+                notes.add(new Note(noteDTO));
+            } else {
+                ArrayList<String> ids = Logger.getInstance().logWithReturn(() -> noteDAO.getIdsOfUsersOfJointNote(noteDTO), "Get note's users");
+                notes.add(new JointNote(noteDTO, ids));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return notes;
     }

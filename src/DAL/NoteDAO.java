@@ -9,6 +9,6 @@ public interface NoteDAO<T> extends DAO<T> {
 
     ArrayList<String> getIdsOfUsersOfJointNote(T noteDTO) throws SQLException;
 
-     ArrayList<NoteDTO> getNotesOfUser(String userId) throws SQLException;
+    ArrayList<NoteDTO> getNotesOfUser(String userId) throws SQLException;
 
 }

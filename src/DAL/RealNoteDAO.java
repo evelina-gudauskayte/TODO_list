@@ -153,7 +153,7 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
     public ArrayList<NoteDTO> getNotesOfUser(String userId) throws SQLException {
         ArrayList<NoteDTO> some = new ArrayList<>();
         for (NoteDTO noteDTO : this.getAll()) {
-            if (noteDTO.getUserId() == userId){
+            if (noteDTO.getUserId().equals(userId)){
                 some.add(noteDTO);
             }
         }
