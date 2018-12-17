@@ -56,14 +56,10 @@ public class Note implements Comparable<Note>, Cloneable {
         } else {
             status = "not done";
         }
-        return ("Deadline at: "
-                + date
-                + "\n    Id:"
-                + id
-                + "\n     note: "
-                + this.getContent())
-                + "\n      Note is "
-                + status;
+        return (date
+                + ":"
+                + this.getContent().substring(0,10))
+                + "...";
     }
 
     public Note clone() {

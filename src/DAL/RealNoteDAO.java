@@ -11,6 +11,9 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
 
     private static Connection connection = Access.getConnection();
 
+    public RealNoteDAO() {
+    }
+
     @Override
     public void addJointNote(NoteDTO noteDTO, ArrayList<String> usersIds) throws SQLException {
         this.add(noteDTO);
@@ -66,8 +69,11 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
         connection.setAutoCommit(false);
         selectNote.setString(1, id);
         ResultSet rs = selectNote.executeQuery();
-        NoteDTO noteDTO = new NoteDTO(id, rs.getString("userId"), rs.getString("content"), rs.getInt("year"),
-                rs.getInt("month"), rs.getInt("day"), rs.getInt("isJoint"), rs.getInt("isDone"));
+        NoteDTO noteDTO = null;
+        if (rs.next()) {
+            noteDTO = new NoteDTO(id, rs.getString("userId"), rs.getString("content"), rs.getInt("year"),
+                    rs.getInt("month"), rs.getInt("day"), rs.getInt("isJoint"), rs.getInt("isDone"));
+        }
         connection.commit();
         rs.close();
         connection.setAutoCommit(true);
@@ -83,15 +89,15 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
         update.setString(2, String.valueOf(newNoteDTO.getYear()));
         update.setString(3, String.valueOf(newNoteDTO.getMonth()));
         update.setString(4, String.valueOf(newNoteDTO.getDay()));
-        if(newNoteDTO.IsJoint()){
-            update.setString(5,"1");
-        }else {
-            update.setString(5,"0");
+        if (newNoteDTO.IsJoint()) {
+            update.setString(5, "1");
+        } else {
+            update.setString(5, "0");
         }
-        if(newNoteDTO.IsDone()){
-            update.setString(6,"1");
-        }else {
-            update.setString(6,"0");
+        if (newNoteDTO.IsDone()) {
+            update.setString(6, "1");
+        } else {
+            update.setString(6, "0");
         }
         update.setString(7, noteDTO.getId());
         update.executeUpdate();
@@ -149,13 +155,29 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
         return some;
     }
 
+    public ArrayList<String> getJointNotesIdsOfUser(String userId) throws SQLException {
+        ArrayList<String> ids = new ArrayList<>();
+        String sql = "SELECT noteId from jointNotes where userId = ? ";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        connection.setAutoCommit(false);
+        preparedStatement.setString(1, userId);
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            ids.add(rs.getString("noteId"));
+        }
+        return ids;
+    }
+
     @Override
     public ArrayList<NoteDTO> getNotesOfUser(String userId) throws SQLException {
         ArrayList<NoteDTO> some = new ArrayList<>();
         for (NoteDTO noteDTO : this.getAll()) {
-            if (noteDTO.getUserId().equals(userId)){
+            if (noteDTO.getUserId().equals(userId)) {
                 some.add(noteDTO);
             }
+        }
+        for (String id : getJointNotesIdsOfUser(userId)) {
+            some.add(get(id));
         }
         return some;
     }

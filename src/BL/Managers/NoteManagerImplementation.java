@@ -4,6 +4,7 @@ import BL.JointNote;
 import BL.Note;
 import BL.NoteDate;
 import BL.User;
+import DAL.Access;
 import DAL.NoteDAO;
 import DAL.NoteDTO;
 import Util.BadContextException;
@@ -59,10 +60,10 @@ public class NoteManagerImplementation implements NoteManager {
         return new Note(note);
     }
 
-    public ArrayList<Note> getAllNotes() {
-        ArrayList<NoteDTO> noteDTOS = Logger.getInstance().logWithReturn(noteDAO::getAll, "Get all notes");
-        return createNotesFromNotesDTO(noteDTOS);
-    }
+//    public ArrayList<Note> getAllNotes() {
+//        ArrayList<NoteDTO> noteDTOS = Logger.getInstance().logWithReturn(noteDAO::getAll, "Get all notes");
+//        return createNotesFromNotesDTO(noteDTOS);
+//    }
 
     public ArrayList<Note> getAllNotesOfUser() {
         ArrayList<NoteDTO> noteDTOS = Logger.getInstance().logWithReturn(() -> noteDAO.getNotesOfUser(user.getId()), "Get all users notes");

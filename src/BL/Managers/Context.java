@@ -14,7 +14,7 @@ public class Context {
         return context;
     }
 
-    public  User getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
     }
 
@@ -28,8 +28,12 @@ public class Context {
         }
     }
 
-    public  boolean isAuthorized(){
-        return currentUser!=null;
+    public boolean isAuthorized() {
+        return currentUser != null;
+    }
+
+    public void logOut() {
+        currentUser = null;
     }
 
     private Context() {

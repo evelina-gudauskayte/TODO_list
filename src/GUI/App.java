@@ -8,7 +8,7 @@ import Util.BadContextException;
 
 public class App {
     public static void main(String[] args) throws BadContextException {
-       Access access = new Access();
+      // Access access = new Access();
        UserManager userManager = new UserManagerImplementation(new RealUserDAO());
        userManager.authorizeUser("Alice","password");
        NoteManager noteManager = new NoteManagerImplementation(new RealNoteDAO());

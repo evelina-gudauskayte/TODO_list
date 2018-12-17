@@ -14,7 +14,5 @@ public interface NoteManager {
 
     Note getNote(String noteId);
 
-    ArrayList<Note> getAllNotes();
-
     ArrayList<Note> getAllNotesOfUser();
 }

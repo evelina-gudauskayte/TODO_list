@@ -1,6 +1,7 @@
 package BL.Managers;
 
 import BL.User;
+import DAL.Access;
 import DAL.RealUserDAO;
 import DAL.UserDAO;
 import DAL.UserDTO;
@@ -29,6 +30,7 @@ public class UserManagerImplementation implements UserManager {
         Context.getInstance().authorizeUser(username, password, userDAO);
         return Context.getInstance().getCurrentUser();
     }
+
 
     public void addNewUser(String username, String password) {
         RealUserDAO userDAO = new RealUserDAO();

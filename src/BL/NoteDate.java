@@ -21,11 +21,10 @@ public class NoteDate implements Comparable<NoteDate> {
 
     @Override
     public String toString() {
-        return ("Year:"
-                + this.date.get(Calendar.YEAR)
-                + "\n Month:"
+        return (this.date.get(Calendar.YEAR)
+                + "."
                 + this.date.get(Calendar.MONTH)
-                + "\n  Day:"
+                + "."
                 + this.date.get(Calendar.DAY_OF_MONTH));
     }
 
