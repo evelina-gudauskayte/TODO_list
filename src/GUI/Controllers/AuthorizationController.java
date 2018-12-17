@@ -34,9 +34,7 @@ public class AuthorizationController {
 
     @FXML
     public void handleConfirmButton(javafx.event.ActionEvent actionEvent) throws IOException {
-        System.out.println(usernameField.getText());
-        System.out.println(passwordField.getText());
-       // Access access = new Access();
+
         UserManager userManager = new UserManagerImplementation(new RealUserDAO());
         userManager.authorizeUser(usernameField.getText(), passwordField.getText());
         if(Context.getInstance().isAuthorized()){ // TODO create new stage with notes
@@ -46,7 +44,6 @@ public class AuthorizationController {
         }else {
             passwordField.clear();
             error.setVisible(true);
-            //pane.getChildren().add(new Label("Wrong username or password"));
         }
     }
     @FXML

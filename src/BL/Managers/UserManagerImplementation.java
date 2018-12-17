@@ -8,6 +8,8 @@ import DAL.UserDTO;
 import Util.HashGenerator;
 import Util.Logger;
 
+import java.util.ArrayList;
+
 public class UserManagerImplementation implements UserManager {
     private final UserDAO<UserDTO> userDAO;
 
@@ -26,9 +28,18 @@ public class UserManagerImplementation implements UserManager {
     }
 
     public User authorizeUser(String username, String password) {
-        // System.out.println(username + HashGenerator.hashPassword(password));
         Context.getInstance().authorizeUser(username, password, userDAO);
         return Context.getInstance().getCurrentUser();
+    }
+
+    @Override
+    public String getIdByUsername(String username) {
+        return Logger.getInstance().logWithReturn(() -> userDAO.getUserId(username), "get id by username");
+    }
+
+    @Override
+    public ArrayList<String> getAllUsernames() {
+        return Logger.getInstance().logWithReturn(()->userDAO.getAllUserNames(),"get all usernames");
     }
 
 

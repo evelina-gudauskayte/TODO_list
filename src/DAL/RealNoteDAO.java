@@ -121,8 +121,8 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
         connection.setAutoCommit(true);
     }
 
-    @Override
-    public ArrayList<NoteDTO> getAll() throws SQLException {
+
+    private ArrayList<NoteDTO> getAll() throws SQLException {
         ArrayList<NoteDTO> allNotes = new ArrayList<>();
         String sql = "SELECT id, userId, content, isJoint, year, month, day, isDone FROM notes";
         PreparedStatement selectNotes = connection.prepareStatement(sql);

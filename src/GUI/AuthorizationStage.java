@@ -10,17 +10,12 @@ public class AuthorizationStage extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../resources/authorization.fxml"));
-        //Button enter = FXMLLoader.load(getClass().getResource(""))
-        //root.get
         Scene scene = new Scene(root);
-        primaryStage.setTitle("SAMPLE");
+        primaryStage.setTitle("TODO_List");
         primaryStage.setScene(scene);
         primaryStage.show();
-        //while ()
     }
-
-
-
+    
     public static void main(String[] args){
         launch(args);
     }

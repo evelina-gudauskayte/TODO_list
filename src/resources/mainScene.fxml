@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx" fx:controller="GUI.Controllers.MainSceneController"
-            xmlns:fx="http://javafx.com/fxml">
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="GUI.Controllers.MainSceneController">
     <top>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
-                <Button fx:id="logOutButton" onAction="#handleLogOutButton" contentDisplay="TOP" mnemonicParsing="false"
+                <Button fx:id="logOutButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleLogOutButton"
                         text="Log out"/>
                 <Button fx:id="settingsButton" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Settings"/>
                 <Label fx:id="usernameLabel" contentDisplay="TOP" text="Username">
@@ -27,23 +28,23 @@
     </top>
     <center>
         <TextArea fx:id="textArea" editable="false" prefHeight="200.0" prefWidth="200.0"
-                  promptText="*Click note to show it*"
-                  BorderPane.alignment="CENTER"/>
+                  promptText="*Click note to show it*" BorderPane.alignment="CENTER"/>
     </center>
     <left>
         <VBox prefHeight="360.0" prefWidth="145.0" BorderPane.alignment="CENTER">
             <children>
                 <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
-                        <Button fx:id="addButton" mnemonicParsing="false" text="+">
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddNoteButton" text="+">
                             <font>
                                 <Font name="System Bold" size="12.0"/>
                             </font>
                         </Button>
-                        <Label fx:id="dateLabel" text="Today: "/>
+                        <Button onAction="#handleRefreshButton" mnemonicParsing="false" text="refresh"/>
+                        <Label fx:id="dateLabel" text="Notes:"/>
                     </items>
                 </ToolBar>
-                <ListView fx:id="listView" prefHeight="372.0" prefWidth="145.0"/>
+                <ListView fx:id="listView" onMouseClicked="#changeNote" prefHeight="372.0" prefWidth="145.0"/>
             </children>
         </VBox>
     </left>

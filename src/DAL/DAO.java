@@ -13,7 +13,7 @@ public interface DAO<T> {
 
     T get(String id) throws SQLException;
 
-    ArrayList<T> getAll() throws SQLException;
+    //ArrayList<T> getAll() throws SQLException;
 
     ArrayList<T> getSome(Predicate<T> predicate) throws SQLException;
 }

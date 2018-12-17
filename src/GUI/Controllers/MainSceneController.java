@@ -9,15 +9,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class MainSceneController {
     @FXML
@@ -36,7 +40,7 @@ public class MainSceneController {
     public ListView<Note> listView;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         try {
             initList();
             initLabel();
@@ -46,16 +50,15 @@ public class MainSceneController {
     }
 
     private void initList() throws BadContextException {
-        //UserManager userManager = new UserManagerImplementation(new RealUserDAO());
         NoteManager noteManager = new NoteManagerImplementation(new RealNoteDAO());
         ArrayList<Note> notes = noteManager.getAllNotesOfUser();
-        for (Note note: notes){
-            System.out.println(note);
-        }
+        notes.sort(Note::compareTo);
+        Collections.reverse(notes);
+        listView.getItems().clear();
         listView.getItems().addAll(notes);
     }
 
-    private void initLabel(){
+    private void initLabel() {
         usernameLabel.setText(Context.getInstance().getCurrentUser().getUserName());
     }
 
@@ -66,6 +69,33 @@ public class MainSceneController {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/authorization.fxml")));
         stage.setScene(scene);
+    }
+
+    @FXML
+    public void  changeNote(MouseEvent event){
+        if(event.getClickCount() == 2 ){
+            Note selectedNote = listView.getSelectionModel().getSelectedItem();
+            textArea.setText(selectedNote.getContent());
+        }
+    }
+
+    @FXML
+    public void handleAddNoteButton(ActionEvent actionEvent) throws IOException, BadContextException {
+        Parent root = FXMLLoader.load(getClass().getResource("/newNote.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Note Creator");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    public  void  handleRefreshButton(ActionEvent actionEvent){
+        try {
+            initList();
+        } catch (BadContextException e) {
+            e.printStackTrace();
+        }
     }
 
 }

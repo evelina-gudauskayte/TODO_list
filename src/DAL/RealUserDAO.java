@@ -13,7 +13,7 @@ public class RealUserDAO implements UserDAO<UserDTO> {
 
     @Override
     public UserDTO get(String username, String password) throws SQLException {
-        String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT id, username, password FROM users WHERE username = ? collate nocase AND password = ?";
         PreparedStatement selectUser = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
         selectUser.setString(1, username);
@@ -44,8 +44,17 @@ public class RealUserDAO implements UserDAO<UserDTO> {
     }
 
     @Override
+    public ArrayList<String> getAllUserNames() throws SQLException {
+        ArrayList<String> names = new ArrayList<>();
+        for(UserDTO userDTO: getAll()){
+            names.add(userDTO.getName());
+        }
+        return names;
+    }
+
+    @Override
     public UserDTO get(String id) throws SQLException {
-        String sql = "SELECT username, password FROM users WHERE id = ?";
+        String sql = "SELECT username, password FROM users WHERE id = ? ";
         PreparedStatement selectUser = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
         selectUser.setString(1, id);
@@ -67,12 +76,12 @@ public class RealUserDAO implements UserDAO<UserDTO> {
         connection.commit();
         sql = "DELETE from notes where userId = ? ";
         preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,userDTO.getId());
+        preparedStatement.setString(1, userDTO.getId());
         preparedStatement.executeUpdate();
         connection.commit();
         sql = "DELETE from jointNotes where userId = ? "; //add deleting from joint notes users's notes
         preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,userDTO.getId());
+        preparedStatement.setString(1, userDTO.getId());
         preparedStatement.executeUpdate();
         connection.commit();
         connection.setAutoCommit(true);
@@ -92,11 +101,10 @@ public class RealUserDAO implements UserDAO<UserDTO> {
     }
 
     @Override
-    public void update(UserDTO userDTO,UserDTO newUserDTO) {//TODO сделать
+    public void update(UserDTO userDTO, UserDTO newUserDTO) {//TODO сделать
     }
 
-    @Override
-    public ArrayList<UserDTO> getAll() throws SQLException {
+    private ArrayList<UserDTO> getAll() throws SQLException {
         ArrayList<UserDTO> users = new ArrayList<>();
         String sql = "select id, username from users";
         PreparedStatement selectUsers = connection.prepareStatement(sql);

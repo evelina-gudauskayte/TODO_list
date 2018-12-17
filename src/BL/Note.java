@@ -45,7 +45,7 @@ public class Note implements Comparable<Note>, Cloneable {
 
     @Override
     public int compareTo(Note note) {
-        return this.getId().compareTo(note.getId());
+        return this.getDate().compareTo(note.getDate());
     }
 
     @Override
@@ -56,9 +56,13 @@ public class Note implements Comparable<Note>, Cloneable {
         } else {
             status = "not done";
         }
+        int end = 10;
+        if(getContent().length() < 10){
+            end = getContent().length();
+        }
         return (date
-                + ":"
-                + this.getContent().substring(0,10))
+                + ": "
+                + this.getContent().substring(0,end))
                 + "...";
     }
 

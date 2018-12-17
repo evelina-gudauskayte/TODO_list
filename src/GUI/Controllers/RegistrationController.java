@@ -40,7 +40,7 @@ public class RegistrationController {
     }
 
     @FXML
-    public void handleCancelButton(ActionEvent actionEvent) throws IOException { //TODO check password stuff 
+    public void handleCancelButton(ActionEvent actionEvent) throws IOException { //TODO check password stuff
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/authorization.fxml")));
         stage.setScene(scene);
