@@ -4,7 +4,6 @@ import BL.JointNote;
 import BL.Note;
 import BL.NoteDate;
 import BL.User;
-import DAL.Access;
 import DAL.NoteDAO;
 import DAL.NoteDTO;
 import Util.BadContextException;
@@ -22,21 +21,28 @@ public class NoteManagerImplementation implements NoteManager {
     }
 
     public void update(Note note, String newContent) {
-        update(note, note.get_updated_note(newContent));
+        update(note, note.getUpdatedNote(newContent));
     }
 
     public void update(Note note, String newContent, NoteDate date) {
-        update(note, note.get_updated_note(newContent, date));
+        update(note, note.getUpdatedNote(newContent, date));
     }
 
     public void update(Note note, NoteDate date) {
-        update(note, note.get_updated_note(date));
+        update(note, note.getUpdatedNote(date));
     }
 
     public void update(Note oldNote, Note newNote) {
         if (oldNote.getId().equals(newNote.getId()))
-            Logger.getInstance().log(() -> noteDAO.update(oldNote.getNoteDTO(user.getId()), newNote.getNoteDTO(user.getId())), "Note updated");
+            //Logger.getInstance().log(() -> noteDAO.update(oldNote.getNoteDTO(user.getId()), newNote.getNoteDTO(user.getId())), "Note updated");
+            Logger.getInstance().log(() -> noteDAO.update(newNote.getNoteDTO(Context.getInstance().getCurrentUser().getId())), "Note updated");
     }
+
+    @Override
+    public void update(Note note) {
+        Logger.getInstance().log(()->noteDAO.update(note.getNoteDTO(Context.getInstance().getCurrentUser().getId())), "updated");
+    }
+
 
     public void add(Note note) {
         if (note instanceof JointNote) {
@@ -82,18 +88,4 @@ public class NoteManagerImplementation implements NoteManager {
         }
         return notes;
     }
-
-
-//    public static ArrayList<JointNote> getJointNotes(){
-//        NoteDAO noteDAO = new NoteDAO();
-//        ArrayList<JointNote> notes= new ArrayList<>();
-//        try {
-//            for(NoteDTO noteDTO: noteDAO.getSome(NoteDTO::IsJoint)){
-//                notes.add(new JointNote(noteDTO, noteDAO.getIdsOfUsersOfJointNote(noteDTO)));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return notes;
-//    }
 }

@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -37,15 +38,16 @@ public class AuthorizationController {
 
         UserManager userManager = new UserManagerImplementation(new RealUserDAO());
         userManager.authorizeUser(usernameField.getText(), passwordField.getText());
-        if(Context.getInstance().isAuthorized()){ // TODO create new stage with notes
+        if (Context.getInstance().isAuthorized()) { // TODO create new stage with notes
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/mainScene.fxml")));
             stage.setScene(scene);
-        }else {
+        } else {
             passwordField.clear();
             error.setVisible(true);
         }
     }
+
     @FXML
     public void handleCancelButton(ActionEvent actionEvent) {
         try {
@@ -55,6 +57,7 @@ public class AuthorizationController {
             e.printStackTrace();
         }
     }
+
     @FXML
     public void handleRegistrationButton(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

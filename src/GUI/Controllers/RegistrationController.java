@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class RegistrationController {
@@ -25,13 +26,14 @@ public class RegistrationController {
     public PasswordField secondPasswordField;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
 
     }
+
     @FXML
     public void handleRegistrationButton(ActionEvent actionEvent) throws IOException {
         UserManager userManager = new UserManagerImplementation(new RealUserDAO());
-        if(!usernameField.getText().isEmpty() && !passwordField.getText().isEmpty() && passwordField.getText().equals(secondPasswordField.getText())) {
+        if (!usernameField.getText().isEmpty() && !passwordField.getText().isEmpty() && passwordField.getText().equals(secondPasswordField.getText())) {
             userManager.addNewUser(usernameField.getText(), passwordField.getText());
         }
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

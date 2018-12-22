@@ -41,6 +41,7 @@ public class Note implements Comparable<Note>, Cloneable {
         this.id = noteDTO.getId();
         this.content = noteDTO.getContent();
         this.date = new NoteDate(noteDTO.getYear(), noteDTO.getMonth(), noteDTO.getDay());
+        this.isDone = noteDTO.IsDone();
     }
 
     @Override
@@ -57,12 +58,12 @@ public class Note implements Comparable<Note>, Cloneable {
             status = "not done";
         }
         int end = 10;
-        if(getContent().length() < 10){
+        if (getContent().length() < 10) {
             end = getContent().length();
         }
         return (date
                 + ": "
-                + this.getContent().substring(0,end))
+                + this.getContent().substring(0, end))
                 + "...";
     }
 
@@ -75,35 +76,33 @@ public class Note implements Comparable<Note>, Cloneable {
         }
     }
 
-    public void markAsDone() {
-        isDone = true;
-    }
-
-    public void markAsUndone() {
-        isDone = false;
+    public void changeStatus() {
+        if (isDone) {
+            isDone = false;
+        } else {
+            isDone = true;
+        }
     }
 
     public void addContent(String content) {
         this.content = this.getContent() + "\n" + content;
     }
 
-    public Note get_updated_note(String content){
+    public Note getUpdatedNote(String content) {
         return new Note(content, this.date, this.isDone, this.id, this.isPersonal);
     }
-    public Note get_updated_note(NoteDate date){
+
+    public Note getUpdatedNote(NoteDate date) {
         return new Note(this.content, date, this.isDone, this.id, this.isPersonal);
     }
-    public Note get_updated_note(String content, NoteDate date){
+
+    public Note getUpdatedNote(String content, NoteDate date) {
         return new Note(content, date, this.isDone, this.id, this.isPersonal);
     }
 
-/*    public void setContent(String content) {
-        this.content = content;
+    public boolean isDone() {
+        return isDone;
     }
-
-    public void setDate(NoteDate date) {
-        this.date = date;
-    }*/
 
     public String getContent() {
         return content;

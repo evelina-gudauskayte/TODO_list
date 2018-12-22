@@ -99,9 +99,14 @@ public class RealUserDAO implements UserDAO<UserDTO> {
         connection.commit();
         connection.setAutoCommit(true);
     }
+//
+//    @Override
+//    public void update(UserDTO userDTO, UserDTO newUserDTO) {//TODO сделать
+//    }
 
     @Override
-    public void update(UserDTO userDTO, UserDTO newUserDTO) {//TODO сделать
+    public void update(UserDTO object) throws SQLException {
+
     }
 
     private ArrayList<UserDTO> getAll() throws SQLException {

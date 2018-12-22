@@ -1,19 +1,21 @@
 package GUI.Controllers;
 
 import BL.*;
+import BL.Listeners.ProgressBarListener;
 import BL.Managers.*;
+import BL.Tasks.CreateNoteTask;
 import DAL.*;
 import Util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class newNoteController {
     @FXML
@@ -26,6 +28,8 @@ public class newNoteController {
     public CheckBox inviteAllCheckBox;
     @FXML
     public ProgressBar createNoteProgressBar;
+    @FXML
+    public Button createButton;
 
     private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
 
@@ -60,28 +64,27 @@ public class newNoteController {
                 }
             }
         }
-        createNote(names);
-    }
-
-    private void createNote(ArrayList<String> names) throws BadContextException { //TODO progress bar from here depends on size of array
         NoteDate date;
         if (datePicker.getValue() == null) {
             date = new NoteDate();
         } else {
-            date = new NoteDate(datePicker.getValue().getYear(), datePicker.getValue().getMonthValue(), datePicker.getValue().getDayOfMonth());
+            date = new NoteDate(datePicker.getValue().getYear(), datePicker.getValue().getMonthValue(), datePicker.getValue().getDayOfMonth()); //TODO test dates
         }
         NoteManager noteManager = new NoteManagerImplementation(new RealNoteDAO());
         UserManager userManager = new UserManagerImplementation(new RealUserDAO());
-        if (names.size() != 0) {
-            ArrayList<String> ids = new ArrayList<>();
-            for (String name : names) {
-                ids.add(userManager.getIdByUsername(name));
-                System.out.println(userManager.getIdByUsername(name));
-            }
-            noteManager.add(new JointNote(date, textArea.getText(), ids));
-        } else {
-            noteManager.add(new Note(date, textArea.getText()));
-        }
+
+        CreateNoteTask createNoteTask = new CreateNoteTask(date, names, textArea.getText(), noteManager, userManager);
+        createNoteTask.addListener(new ProgressBarListener(createNoteProgressBar));
+
+        createNoteTask.setOnRunning((taskEvent) -> createButton.setDisable(true));
+        createNoteTask.setOnSucceeded((taskEvent) -> {
+            Stage stage = (Stage) createButton.getScene().getWindow();
+            stage.close();
+        });
+
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        executor.execute(createNoteTask);
+        executor.shutdown();
     }
 
     @FXML

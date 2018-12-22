@@ -8,19 +8,26 @@ import Util.BadContextException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class MainSceneController {
@@ -38,6 +45,10 @@ public class MainSceneController {
     public Label dateLabel;
     @FXML
     public ListView<Note> listView;
+    @FXML
+    public MenuItem deleteNoteMenuItem;
+    @FXML
+    public MenuItem chandeStatusMenyItem;
 
     @FXML
     public void initialize() {
@@ -54,9 +65,27 @@ public class MainSceneController {
         ArrayList<Note> notes = noteManager.getAllNotesOfUser();
         notes.sort(Note::compareTo);
         Collections.reverse(notes);
+
         listView.getItems().clear();
         listView.getItems().addAll(notes);
+        listView.setCellFactory(param -> new ListCell<Note>() {
+            @Override
+            protected void updateItem(Note note, boolean empty) {
+                super.updateItem(note, empty);
+                if (empty || note == null) {
+                    //setText("");
+                } else {
+                    setText(note.toString());
+                    if (note.isDone()) {
+                        setStyle("-fx-control-inner-background:derive(palegreen, 50%) ");
+                    } else {
+                        setStyle("-fx-control-inner-background:derive(palevioletred, 50%) ");
+                    }
+                }
+            }
+        });
     }
+
 
     private void initLabel() {
         usernameLabel.setText(Context.getInstance().getCurrentUser().getUserName());
@@ -72,8 +101,8 @@ public class MainSceneController {
     }
 
     @FXML
-    public void  changeNote(MouseEvent event){
-        if(event.getClickCount() == 2 ){
+    public void changeNote(MouseEvent event) {
+        if (event.getClickCount() == 2) {
             Note selectedNote = listView.getSelectionModel().getSelectedItem();
             textArea.setText(selectedNote.getContent());
         }
@@ -84,14 +113,46 @@ public class MainSceneController {
         Parent root = FXMLLoader.load(getClass().getResource("/newNote.fxml"));
         Scene scene = new Scene(root);
         Stage stage = new Stage();
+        stage.setOnHidden((event) -> {
+            try {
+                initList();
+            } catch (BadContextException e) {
+                e.printStackTrace();
+            }
+        });
         stage.setTitle("Note Creator");
         stage.setScene(scene);
         stage.show();
+
     }
 
     @FXML
-    public  void  handleRefreshButton(ActionEvent actionEvent){
+    public void handleRefreshButton(ActionEvent actionEvent) {
         try {
+            initList();
+        } catch (BadContextException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleDelete() {
+        try {
+            NoteManager noteManager = new NoteManagerImplementation(new RealNoteDAO());
+            noteManager.deleteNote(listView.getSelectionModel().getSelectedItem());
+            initList();
+        } catch (BadContextException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleHandleChangeStatus(ActionEvent event) {
+        try {
+            NoteManager noteManager = new NoteManagerImplementation(new RealNoteDAO());
+            Note note = listView.getSelectionModel().getSelectedItem();
+            note.changeStatus();
+            noteManager.update(note);
             initList();
         } catch (BadContextException e) {
             e.printStackTrace();

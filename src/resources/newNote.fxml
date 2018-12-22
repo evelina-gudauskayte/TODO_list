@@ -24,7 +24,7 @@
             <children>
                 <ProgressBar fx:id="createNoteProgressBar" prefHeight="25.0" prefWidth="200.0" progress="0.0"/>
                 <Separator orientation="VERTICAL" prefHeight="25.0" prefWidth="179.0" visible="false"/>
-                <Button onAction="#handleCreateButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Create note"/>
+                <Button fx:id="createButton" onAction="#handleCreateButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Create note"/>
             </children>
         </HBox>
     </bottom>

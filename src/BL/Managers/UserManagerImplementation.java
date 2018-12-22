@@ -20,7 +20,7 @@ public class UserManagerImplementation implements UserManager {
     public void updateUserPassword(User user, String password) {
         User newUser = user.clone();
         newUser.updatedUserPassword(password);
-        Logger.getInstance().log(() -> userDAO.update(user.getUserDTO(), newUser.getUserDTO()), "note updating");
+        Logger.getInstance().log(() -> userDAO.update(newUser.getUserDTO()), "note updating");
     }
 
     public void deleleteUser(User user) {
