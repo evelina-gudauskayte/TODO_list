@@ -25,7 +25,8 @@ public class JointNote extends Note {
     @Override
     public NoteDTO getNoteDTO(String userId) {
         int personal = this.isPersonal() ? 1 : 0;
-        return new NoteDTO(this.getId(), userId, this.getContent(), this.getDate().getYear(), this.getDate().getMonth(), this.getDate().getDayOfMonth(), 1, personal);
+        int done = this.isDone() ? 1 : 0;
+        return new NoteDTO(this.getId(), userId, this.getContent(), this.getDate().getYear(), this.getDate().getMonth(), this.getDate().getDayOfMonth(), 1, done);
     }
 
     public ArrayList<String> getUsersIds() {

@@ -12,8 +12,8 @@ public class NoteDTO {
     private int year;
     private int month;
     private int day;
-    private int isJoint = 0; //0=no, 1-yes
-    private int isDone = 0;
+    private int isJoint; //0=no, 1-yes
+    private int isDone;
 
     public NoteDTO(String id, String userId, String content, int year, int month, int day, int isJoint, int isDone) {
         this.id = id;
@@ -58,10 +58,7 @@ public class NoteDTO {
     }
 
     public boolean IsDone() {
-        if (this.isDone == 0) {
-            return false;
-        }
-        return true;
+        return this.isDone != 0;
     }
 
 

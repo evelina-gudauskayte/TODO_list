@@ -77,15 +77,11 @@ public class Note implements Comparable<Note>, Cloneable {
     }
 
     public void changeStatus() {
-        if (isDone) {
-            isDone = false;
-        } else {
-            isDone = true;
-        }
+        isDone = !isDone;
     }
 
-    public void addContent(String content) {
-        this.content = this.getContent() + "\n" + content;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Note getUpdatedNote(String content) {

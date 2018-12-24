@@ -40,9 +40,9 @@ public class NoteManagerImplementation implements NoteManager {
 
     @Override
     public void update(Note note) {
-        Logger.getInstance().log(()->noteDAO.update(note.getNoteDTO(Context.getInstance().getCurrentUser().getId())), "updated");
+        NoteDTO noteDTO = note.getNoteDTO(Context.getInstance().getCurrentUser().getId());
+        Logger.getInstance().log(() -> noteDAO.update(noteDTO), "updated");
     }
-
 
     public void add(Note note) {
         if (note instanceof JointNote) {

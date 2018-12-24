@@ -1,13 +1,23 @@
 package Util;
 
+import javafx.stage.FileChooser;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class Logger {
     private static Logger logger = new Logger();
     private PrintStream stream = System.out;
 
     private Logger() {
+//        try {
+//            stream=new PrintStream("log.txt");
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void setStream(PrintStream stream) {

@@ -106,25 +106,25 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
 //    }
 
     @Override
-    public void update(NoteDTO newNoteDTO) throws SQLException {
+    public void update(NoteDTO noteDTO) throws SQLException {
         String sql = "UPDATE notes SET content = ?, year = ?, month = ?, day = ?, isJoint = ?, isDone = ? WHERE id = ?";
         PreparedStatement update = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
-        update.setString(1, newNoteDTO.getContent());
-        update.setString(2, String.valueOf(newNoteDTO.getYear()));
-        update.setString(3, String.valueOf(newNoteDTO.getMonth()));
-        update.setString(4, String.valueOf(newNoteDTO.getDay()));
-        if (newNoteDTO.IsJoint()) {
+        update.setString(1, noteDTO.getContent());
+        update.setString(2, String.valueOf(noteDTO.getYear()));
+        update.setString(3, String.valueOf(noteDTO.getMonth()));
+        update.setString(4, String.valueOf(noteDTO.getDay()));
+        if (noteDTO.IsJoint()) {
             update.setString(5, "1");
         } else {
             update.setString(5, "0");
         }
-        if (newNoteDTO.IsDone()) {
+        if (noteDTO.IsDone()) {
             update.setString(6, "1");
         } else {
             update.setString(6, "0");
         }
-        update.setString(7, newNoteDTO.getId());
+        update.setString(7, noteDTO.getId());
         update.executeUpdate();
         connection.commit();
         connection.setAutoCommit(true);
@@ -156,7 +156,6 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
         connection.setAutoCommit(true);
 
     }
-
 
     private ArrayList<NoteDTO> getAll() throws SQLException {
         ArrayList<NoteDTO> allNotes = new ArrayList<>();

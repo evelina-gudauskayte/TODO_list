@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainSceneController {
+    Note prevSelected = null;
     @FXML
     public Button logOutButton;
     @FXML
@@ -86,14 +87,25 @@ public class MainSceneController {
         });
     }
 
-
     private void initLabel() {
         usernameLabel.setText(Context.getInstance().getCurrentUser().getUserName());
     }
 
+    private void saveNoteContent(Note note) {
+        if (note != null && !note.getContent().equals(textArea.getText())) {
+            try {
+                note.setContent(textArea.getText());
+                NoteManager noteManager = new NoteManagerImplementation(new RealNoteDAO());
+                noteManager.update(note);
+            } catch (BadContextException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @FXML
     public void handleLogOutButton(ActionEvent actionEvent) throws IOException {
-        UserManager userManager = new UserManagerImplementation(new RealUserDAO());
+        saveNoteContent(listView.getSelectionModel().getSelectedItem());
         Context.getInstance().logOut();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/authorization.fxml")));
@@ -102,14 +114,17 @@ public class MainSceneController {
 
     @FXML
     public void changeNote(MouseEvent event) {
+        saveNoteContent(prevSelected);
         if (event.getClickCount() == 2) {
             Note selectedNote = listView.getSelectionModel().getSelectedItem();
             textArea.setText(selectedNote.getContent());
+            prevSelected = listView.getSelectionModel().getSelectedItem();
         }
     }
 
     @FXML
     public void handleAddNoteButton(ActionEvent actionEvent) throws IOException, BadContextException {
+        saveNoteContent(listView.getSelectionModel().getSelectedItem());
         Parent root = FXMLLoader.load(getClass().getResource("/newNote.fxml"));
         Scene scene = new Scene(root);
         Stage stage = new Stage();
@@ -128,6 +143,7 @@ public class MainSceneController {
 
     @FXML
     public void handleRefreshButton(ActionEvent actionEvent) {
+        saveNoteContent(listView.getSelectionModel().getSelectedItem());
         try {
             initList();
         } catch (BadContextException e) {
@@ -158,5 +174,4 @@ public class MainSceneController {
             e.printStackTrace();
         }
     }
-
 }
