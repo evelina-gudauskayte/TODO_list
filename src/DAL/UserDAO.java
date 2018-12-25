@@ -10,4 +10,6 @@ public interface UserDAO<T> extends DAO<T> {
     ArrayList<String> getAllUserNames() throws SQLException;
 
     T get(String username, String password) throws SQLException;
+
+    String getUsernameById(String id) throws  SQLException;
 }

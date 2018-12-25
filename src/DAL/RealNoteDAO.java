@@ -1,5 +1,7 @@
 package DAL;
 
+import BL.JointNote;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -192,7 +194,7 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
 
     public ArrayList<String> getJointNotesIdsOfUser(String userId) throws SQLException {
         ArrayList<String> ids = new ArrayList<>();
-        String sql = "SELECT noteId from jointNotes where userId = ? ";
+        String sql = "SELECT noteId from jointNotes where userId = ? AND isNoticed=1 ";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
         preparedStatement.setString(1, userId);
@@ -217,4 +219,30 @@ public class RealNoteDAO implements NoteDAO<NoteDTO> {
         return some;
     }
 
+    @Override
+    public ArrayList<NoteDTO> getNotesToNotice(String userId) throws SQLException {
+        ArrayList<NoteDTO> some = new ArrayList<>();
+        String sql = "select noteId from jointNotes where userId = ? AND isNoticed = 0";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, userId);
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            NoteDTO noteDTO = get(rs.getString("noteId"));
+            some.add(new NoteDTO(noteDTO, 0));
+        }
+
+        return some;
+    }
+
+    @Override
+    public void setNoticed(String noteId, String userId) throws SQLException {
+        String update = "update jointNotes set isNoticed = 1 where noteId = ? AND userId = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(update);
+        connection.setAutoCommit(false);
+        preparedStatement.setString(1, noteId);
+        preparedStatement.setString(2, userId);
+        preparedStatement.executeUpdate();
+        connection.commit();
+        connection.setAutoCommit(true);
+    }
 }

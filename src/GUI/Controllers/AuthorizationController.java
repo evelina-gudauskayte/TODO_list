@@ -48,15 +48,15 @@ public class AuthorizationController {
         }
     }
 
-    @FXML
-    public void handleCancelButton(ActionEvent actionEvent) {
-        try {
-            Platform.exit();
-            System.exit(0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @FXML
+//    public void handleCancelButton(ActionEvent actionEvent) {
+//        try {
+//            Platform.exit();
+//            System.exit(0);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @FXML
     public void handleRegistrationButton(ActionEvent actionEvent) throws IOException {

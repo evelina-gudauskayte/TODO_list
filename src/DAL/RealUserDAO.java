@@ -30,6 +30,20 @@ public class RealUserDAO implements UserDAO<UserDTO> {
     }
 
     @Override
+    public String getUsernameById(String id) throws SQLException {
+        String sql = "SELECT username FROM users WHERE id = ? ";
+        PreparedStatement selectUser = connection.prepareStatement(sql);
+        connection.setAutoCommit(false);
+        selectUser.setString(1, id);
+        ResultSet rs = selectUser.executeQuery();
+        String ans = rs.getString("username");
+        connection.commit();
+        rs.close();
+        connection.setAutoCommit(true);
+        return ans;
+    }
+
+    @Override
     public String getUserId(String username) throws SQLException {
         String sql = "SELECT id FROM users WHERE username = ? ";
         PreparedStatement selectUser = connection.prepareStatement(sql);

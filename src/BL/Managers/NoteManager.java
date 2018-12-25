@@ -1,5 +1,6 @@
 package BL.Managers;
 
+import BL.JointNote;
 import BL.Note;
 import BL.User;
 
@@ -16,5 +17,11 @@ public interface NoteManager {
 
     Note getNote(String noteId);
 
+    String getNoteAuthor(Note note);
+
     ArrayList<Note> getAllNotesOfUser();
+
+    ArrayList<Note> getUnnoticed();
+
+    void setNoticed(JointNote note);
 }

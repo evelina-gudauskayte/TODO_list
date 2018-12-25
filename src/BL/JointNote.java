@@ -5,9 +5,14 @@ import DAL.NoteDTO;
 import java.util.ArrayList;
 
 public class JointNote extends Note {
+    private boolean isNoticed;
     private ArrayList<String> usersIds = new ArrayList<>();
 
     public JointNote(NoteDate date, String content, ArrayList<String> usersIds) {
+        super(date, content);
+        this.usersIds = usersIds;
+    }
+    public JointNote(NoteDate date, String content, ArrayList<String> usersIds, boolean isNoticed) {
         super(date, content);
         this.usersIds = usersIds;
     }
@@ -20,6 +25,10 @@ public class JointNote extends Note {
     public JointNote(NoteDTO noteDTO, ArrayList<String> usersIds) {
         super(noteDTO);
         this.usersIds = usersIds;
+    }
+
+    public void setNoticed(){
+        isNoticed=true;
     }
 
     @Override

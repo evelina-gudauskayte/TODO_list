@@ -6,6 +6,7 @@ import BL.NoteDate;
 import BL.User;
 import DAL.NoteDAO;
 import DAL.NoteDTO;
+import DAL.RealUserDAO;
 import Util.BadContextException;
 import Util.Logger;
 
@@ -66,6 +67,16 @@ public class NoteManagerImplementation implements NoteManager {
         return new Note(note);
     }
 
+
+
+    @Override
+    public String getNoteAuthor(Note note) {
+        NoteDTO noteDTO = Logger.getInstance().logWithReturn(()->noteDAO.get(note.getId()), "get");
+        UserManager userManager = new UserManagerImplementation(new RealUserDAO());
+        String username = Logger.getInstance().logWithReturn(()-> userManager.getUsernameById(noteDTO.getUserId()), "get username");
+        return username;
+    }
+
 //    public ArrayList<Note> getAllNotes() {
 //        ArrayList<NoteDTO> noteDTOS = Logger.getInstance().logWithReturn(noteDAO::getAll, "Get all notes");
 //        return createNotesFromNotesDTO(noteDTOS);
@@ -74,6 +85,17 @@ public class NoteManagerImplementation implements NoteManager {
     public ArrayList<Note> getAllNotesOfUser() {
         ArrayList<NoteDTO> noteDTOS = Logger.getInstance().logWithReturn(() -> noteDAO.getNotesOfUser(user.getId()), "Get all users notes");
         return createNotesFromNotesDTO(noteDTOS);
+    }
+
+    @Override
+    public ArrayList<Note> getUnnoticed() {
+        ArrayList<NoteDTO> list = Logger.getInstance().logWithReturn(()->noteDAO.getNotesToNotice(Context.getInstance().getCurrentUser().getId()), "get unnoticed");
+        return createNotesFromNotesDTO(list);
+    }
+
+    @Override
+    public void setNoticed(JointNote note) {
+        Logger.getInstance().log(()->noteDAO.setNoticed(note.getId(), Context.getInstance().getCurrentUser().getId()),"updated");
     }
 
     private ArrayList<Note> createNotesFromNotesDTO(ArrayList<NoteDTO> noteDTOS) {

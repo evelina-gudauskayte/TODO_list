@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.MainSceneController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.MainSceneController">
     <top>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
                 <Button fx:id="logOutButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleLogOutButton" text="Log out" />
+            <Button onAction="#handleNotificationButton" mnemonicParsing="false" prefWidth="100.0" text="Notifications" />
                 <Button fx:id="settingsButton" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Settings" />
                 <Label fx:id="usernameLabel" contentDisplay="TOP" text="Username">
                     <font>

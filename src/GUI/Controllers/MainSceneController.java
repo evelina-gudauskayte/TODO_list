@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainSceneController {
-    Note prevSelected = null;
+    private Note prevSelected = null;
     @FXML
     public Button logOutButton;
     @FXML
@@ -115,7 +115,7 @@ public class MainSceneController {
     @FXML
     public void changeNote(MouseEvent event) {
         saveNoteContent(prevSelected);
-        if (event.getClickCount() == 2) {
+        if (event.getClickCount() == 2 && listView.getSelectionModel().getSelectedItem()!=null) {
             Note selectedNote = listView.getSelectionModel().getSelectedItem();
             textArea.setText(selectedNote.getContent());
             prevSelected = listView.getSelectionModel().getSelectedItem();
@@ -123,7 +123,7 @@ public class MainSceneController {
     }
 
     @FXML
-    public void handleAddNoteButton(ActionEvent actionEvent) throws IOException, BadContextException {
+    public void handleAddNoteButton(ActionEvent actionEvent) throws IOException {
         saveNoteContent(listView.getSelectionModel().getSelectedItem());
         Parent root = FXMLLoader.load(getClass().getResource("/newNote.fxml"));
         Scene scene = new Scene(root);
@@ -173,5 +173,23 @@ public class MainSceneController {
         } catch (BadContextException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void handleNotificationButton(ActionEvent event) throws IOException {
+        saveNoteContent(listView.getSelectionModel().getSelectedItem());
+        Parent root = FXMLLoader.load(getClass().getResource("/notificationMenu.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setOnHidden((ev) -> {
+            try {
+                initList();
+            } catch (BadContextException e) {
+                e.printStackTrace();
+            }
+        });
+        stage.setTitle("Note Creator");
+        stage.setScene(scene);
+        stage.show();
     }
 }

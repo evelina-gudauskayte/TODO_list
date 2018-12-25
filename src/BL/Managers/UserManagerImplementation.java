@@ -23,7 +23,7 @@ public class UserManagerImplementation implements UserManager {
         Logger.getInstance().log(() -> userDAO.update(newUser.getUserDTO()), "note updating");
     }
 
-    public void deleleteUser(User user) {
+    public void deleteUser(User user) {
         Logger.getInstance().log(() -> userDAO.delete(user.getUserDTO()), "User deleting");
     }
 
@@ -39,7 +39,12 @@ public class UserManagerImplementation implements UserManager {
 
     @Override
     public ArrayList<String> getAllUsernames() {
-        return Logger.getInstance().logWithReturn(()->userDAO.getAllUserNames(),"get all usernames");
+        return Logger.getInstance().logWithReturn(userDAO::getAllUserNames, "get all usernames");
+    }
+
+    @Override
+    public String getUsernameById(String id) {
+        return Logger.getInstance().logWithReturn(() -> userDAO.getUsernameById(id), "get username");
     }
 
 
