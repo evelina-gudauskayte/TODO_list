@@ -36,29 +36,29 @@ public class NoteManagerImplementation implements NoteManager {
     public void update(Note oldNote, Note newNote) {
         if (oldNote.getId().equals(newNote.getId()))
             //Logger.getInstance().log(() -> noteDAO.update(oldNote.getNoteDTO(user.getId()), newNote.getNoteDTO(user.getId())), "Note updated");
-            Logger.getInstance().log(() -> noteDAO.update(newNote.getNoteDTO(Context.getInstance().getCurrentUser().getId())), "Note updated");
+            Logger.getInstance().log(() -> noteDAO.update(newNote.getNoteDTO(Context.getInstance().getCurrentUser().getId())), "Update note");
     }
 
     @Override
     public void update(Note note) {
         NoteDTO noteDTO = note.getNoteDTO(Context.getInstance().getCurrentUser().getId());
-        Logger.getInstance().log(() -> noteDAO.update(noteDTO), "updated");
+        Logger.getInstance().log(() -> noteDAO.update(noteDTO), "Update note");
     }
 
     public void add(Note note) {
         if (note instanceof JointNote) {
             addJointNote((JointNote) note);
         } else {
-            Logger.getInstance().log(() -> noteDAO.add(note.getNoteDTO(user.getId())), "Note added");
+            Logger.getInstance().log(() -> noteDAO.add(note.getNoteDTO(user.getId())), "Add note");
         }
     }
 
     private void addJointNote(JointNote note) {
-        Logger.getInstance().log(() -> noteDAO.addJointNote(note.getNoteDTO(user.getId()), note.getUsersIds()), "Joint note added");
+        Logger.getInstance().log(() -> noteDAO.addJointNote(note.getNoteDTO(user.getId()), note.getUsersIds()), "Add joint note");
     }
 
     public void deleteNote(Note note) {
-        Logger.getInstance().log(() -> noteDAO.delete(note.getNoteDTO(user.getId())), "Note is deleted");
+        Logger.getInstance().log(() -> noteDAO.delete(note.getNoteDTO(user.getId())), "Delete note");
         System.out.println("Note is deleted.");
     }
 
@@ -73,7 +73,7 @@ public class NoteManagerImplementation implements NoteManager {
     public String getNoteAuthor(Note note) {
         NoteDTO noteDTO = Logger.getInstance().logWithReturn(()->noteDAO.get(note.getId()), "get");
         UserManager userManager = new UserManagerImplementation(new RealUserDAO());
-        String username = Logger.getInstance().logWithReturn(()-> userManager.getUsernameById(noteDTO.getUserId()), "get username");
+        String username = Logger.getInstance().logWithReturn(()-> userManager.getUsernameById(noteDTO.getUserId()), "Get username");
         return username;
     }
 
@@ -89,13 +89,13 @@ public class NoteManagerImplementation implements NoteManager {
 
     @Override
     public ArrayList<Note> getUnnoticed() {
-        ArrayList<NoteDTO> list = Logger.getInstance().logWithReturn(()->noteDAO.getNotesToNotice(Context.getInstance().getCurrentUser().getId()), "get unnoticed");
+        ArrayList<NoteDTO> list = Logger.getInstance().logWithReturn(()->noteDAO.getNotesToNotice(Context.getInstance().getCurrentUser().getId()), "Get unnoticed notes");
         return createNotesFromNotesDTO(list);
     }
 
     @Override
     public void setNoticed(JointNote note) {
-        Logger.getInstance().log(()->noteDAO.setNoticed(note.getId(), Context.getInstance().getCurrentUser().getId()),"updated");
+        Logger.getInstance().log(()->noteDAO.setNoticed(note.getId(), Context.getInstance().getCurrentUser().getId()),"Update note(change status)");
     }
 
     private ArrayList<Note> createNotesFromNotesDTO(ArrayList<NoteDTO> noteDTOS) {

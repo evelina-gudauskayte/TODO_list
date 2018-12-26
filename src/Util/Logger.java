@@ -1,5 +1,6 @@
 package Util;
 
+import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 
 import java.io.FileNotFoundException;
@@ -13,11 +14,6 @@ public class Logger {
     private PrintStream stream = System.out;
 
     private Logger() {
-//        try {
-//            stream=new PrintStream("log.txt");
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void setStream(PrintStream stream) {
@@ -37,6 +33,7 @@ public class Logger {
             stream.println("Time: " + (System.nanoTime() - startTime) / 1e9);
         } catch (Exception e) {
             e.printStackTrace();
+            alert(message);
         }
     }
 
@@ -50,8 +47,14 @@ public class Logger {
             return object;
         } catch (Exception e) {
             e.printStackTrace();
+            alert(message);
         }
         return null;
+    }
+    private void alert(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message+" ERROR");
+        alert.showAndWait();
     }
 
 }

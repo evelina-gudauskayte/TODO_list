@@ -1,5 +1,6 @@
 package GUI.Controllers;
 
+import BL.Managers.Context;
 import BL.Managers.UserManager;
 import BL.Managers.UserManagerImplementation;
 import DAL.RealUserDAO;
@@ -40,9 +41,12 @@ public class RegistrationController {
                 && !usernameField.getText().contains(" ")
                 && !usernameField.getText().contains("#")) {
             userManager.addNewUser(usernameField.getText(), passwordField.getText());
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/authorization.fxml")));
-            stage.setScene(scene);
+            userManager.authorizeUser(usernameField.getText(), passwordField.getText());
+            if(Context.getInstance().isAuthorized()){
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/mainScene.fxml")));
+                stage.setScene(scene);
+            }
         }else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Wrong input");
@@ -52,7 +56,7 @@ public class RegistrationController {
     }
 
     @FXML
-    public void handleCancelButton(ActionEvent actionEvent) throws IOException { //TODO check password stuff
+    public void handleCancelButton(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/authorization.fxml")));
         stage.setScene(scene);

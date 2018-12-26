@@ -11,7 +11,6 @@
             <items>
                 <Button fx:id="logOutButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleLogOutButton" text="Log out" />
             <Button fx:id="notificationButton" onAction="#handleNotificationButton" mnemonicParsing="false" prefWidth="100.0" text="Notifications" />
-                <Button fx:id="settingsButton" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Settings" />
                 <Label fx:id="usernameLabel" contentDisplay="TOP" text="Username">
                     <font>
                         <Font size="16.0" />

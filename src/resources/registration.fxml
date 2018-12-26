@@ -35,7 +35,7 @@
                 <Font size="14.0" />
             </font>
         </Label>
-      <Button layoutX="316.0" layoutY="297.0" onAction="#handleCancelButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="Cancel" />
+      <Button layoutX="316.0" layoutY="297.0" onAction="#handleCancelButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="Back" />
     </children>
 
 </AnchorPane>

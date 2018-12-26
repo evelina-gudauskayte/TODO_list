@@ -7,6 +7,7 @@ import BL.Tasks.CreateNoteTask;
 import DAL.*;
 import Util.*;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -44,10 +45,25 @@ public class newNoteController {
         for (String name : userManager.getAllUsernames()) {
             if (!name.equals(Context.getInstance().getCurrentUser().getUserName())) {
                 CheckBox checkBox = new CheckBox(name);
+                checkBox.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        checkCheckBoxesStatus();
+                    }
+                });
                 checkBoxVBox.getChildren().add(checkBox);
                 checkBoxes.add(checkBox);
             }
         }
+    }
+
+    private void checkCheckBoxesStatus() {
+        int counter = 0;
+        for (CheckBox checkBox : checkBoxes) {
+            if (inviteAllCheckBox.isSelected() && !checkBox.isSelected()) inviteAllCheckBox.setSelected(false);
+            if (checkBox.isSelected()) counter++;
+        }
+        if (counter == checkBoxes.size()) inviteAllCheckBox.setSelected(true);
     }
 
     @FXML
