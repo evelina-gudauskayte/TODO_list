@@ -28,8 +28,8 @@
 
         <TextField fx:id="usernameField" layoutX="226.0" layoutY="167.0" promptText="enter username" />
         <PasswordField fx:id="passwordField" layoutX="226.0" layoutY="216.0" promptText="enter password" />
-        <Button fx:id="registrationButton" layoutX="226.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleRegistrationButton" prefHeight="25.0" prefWidth="80.0" text="Registration" />
         <PasswordField fx:id="secondPasswordField" layoutX="226.0" layoutY="261.0" promptText="enter same password" />
+        <Button fx:id="registrationButton" layoutX="226.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleRegistrationButton" prefHeight="25.0" prefWidth="80.0" text="Registration" />
         <Label layoutX="226.0" layoutY="241.0" text="Confirm password">
             <font>
                 <Font size="14.0" />

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -33,12 +34,21 @@ public class RegistrationController {
     @FXML
     public void handleRegistrationButton(ActionEvent actionEvent) throws IOException {
         UserManager userManager = new UserManagerImplementation(new RealUserDAO());
-        if (!usernameField.getText().isEmpty() && !passwordField.getText().isEmpty() && passwordField.getText().equals(secondPasswordField.getText())) {
+        if (!usernameField.getText().isEmpty()
+                && !passwordField.getText().isEmpty()
+                && passwordField.getText().equals(secondPasswordField.getText())
+                && !usernameField.getText().contains(" ")
+                && !usernameField.getText().contains("#")) {
             userManager.addNewUser(usernameField.getText(), passwordField.getText());
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/authorization.fxml")));
+            stage.setScene(scene);
+        }else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Wrong input");
+            alert.setContentText("Wrong username or different passwords, try again.");
+            alert.showAndWait();
         }
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/authorization.fxml")));
-        stage.setScene(scene);
     }
 
     @FXML
